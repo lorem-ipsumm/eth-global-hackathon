@@ -24,6 +24,7 @@
     "react-dom": "18.2.0",
     "react-draggable": "^4.4.6",
     "react-feather": "^2.0.10",
+    "react-rnd": "^10.4.1",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"

@@ -1,10 +1,10 @@
 import Sidebar from "../components/Sidebar";
-import View from "./View";
+import Canvas from "./Canvas";
 
 const Editor = () => {
   return (
     <div className="w-screen h-screen flex">
-      <View/>
+      <Canvas/>
       <Sidebar/>
     </div>
   )
