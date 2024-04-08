@@ -1,12 +1,11 @@
 "use client";
 import { TabsTrigger } from "@radix-ui/react-tabs";
-import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { Tabs, TabsList } from "~/components/ui/tabs";
 import { ABI_METHOD } from "../utils.ts/interfaces";
 import { PlusCircle } from "react-feather";
 import { useAtom } from "jotai";
-import { activeContractAtom } from "../utils.ts/atoms";
+import { abiReadMethodsAtom, abiWriteMethodsAtom } from "../utils.ts/atoms";
 import {
   Accordion,
   AccordionContent,
@@ -15,63 +14,11 @@ import {
 } from "~/components/ui/accordion";
 
 const ContractMethodsView = () => {
+  const [readMethods] = useAtom<ABI_METHOD[]>(abiReadMethodsAtom);
+  const [writeMethods] = useAtom<ABI_METHOD[]>(abiWriteMethodsAtom);
+
   // state vars
-  const [readMethods, setReadMethods] = useState<ABI_METHOD[]>([]);
-  const [writeMethods, setWriteMethods] = useState<ABI_METHOD[]>([]);
   const [activeTab, setActiveTab] = useState<string>("read");
-
-  // atoms
-  const [activeContract] = useAtom(activeContractAtom);
-
-  // fetch the contract abi from etherscan
-  const getContractAbi = useCallback(async () => {
-    try {
-      // build url
-      const url = new URL("https://api.etherscan.io/api");
-      url.searchParams.append("module", "contract");
-      url.searchParams.append("action", "getabi");
-      url.searchParams.append("address", activeContract as string);
-      url.searchParams.append(
-        "apikey",
-        process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY as string,
-      );
-      // fetch abi
-      const response = await axios.get(url.toString());
-      // set abi
-      // setAbi(response.data.result);
-      separateMethods(response.data.result);
-    } catch (e) {
-      console.log(e);
-    }
-  }, []);
-
-  useEffect(() => {
-    getContractAbi();
-  }, [getContractAbi]);
-
-  const separateMethods = (abiString: string) => {
-    const abi: ABI_METHOD[] = JSON.parse(abiString);
-    // list of read and write methods
-    const readMethods: ABI_METHOD[] = [];
-    const writeMethods: ABI_METHOD[] = [];
-    // iterate over abi and separate read and write methods
-    abi.forEach((method) => {
-      if (method.type === "function") {
-        // check if method is read or write
-        if (
-          method.stateMutability === "view" ||
-          method.stateMutability === "pure"
-        ) {
-          readMethods.push(method);
-        } else {
-          writeMethods.push(method);
-        }
-      }
-    });
-    // update state
-    setReadMethods(readMethods);
-    setWriteMethods(writeMethods);
-  };
 
   const renderTabs = () => {
     const tab = (label: string, tabValue: string) => (
