@@ -4,8 +4,10 @@ import { activeContractAtom, activeSidebarViewAtom } from "../utils.ts/atoms";
 import { useRef, useState } from "react";
 import { ethers } from "ethers";
 import { useContractAbi } from "../hooks/useContractAbi";
+import { BeatLoader } from "react-spinners";
 
 const SelectContractView = () => {
+  const [pending, setPending] = useState<boolean>(false);
   const [, setActiveSidebarView] = useAtom(activeSidebarViewAtom);
   const [, setActiveContract] = useAtom(activeContractAtom);
 
@@ -16,6 +18,7 @@ const SelectContractView = () => {
   const { determineContractValidity } = useContractAbi();
 
   const buttonClicked = async () => {
+    setPending(true);
     if (!ethers.isAddress(inputRef.current!.value) || !inputRef.current) {
       setIsValidInput(false);
       return;
@@ -29,6 +32,7 @@ const SelectContractView = () => {
     } else {
       setIsValidInput(false);
     }
+    setPending(false);
   };
 
   return (
@@ -41,9 +45,9 @@ const SelectContractView = () => {
       />
       <button
         onClick={buttonClicked}
-        className="h-10 w-full rounded-md bg-blue-500 text-white transition-all hover:bg-blue-600"
+        className="flex h-10 w-full items-center justify-center rounded-md bg-blue-500 text-white transition-all hover:bg-blue-600"
       >
-        Select Contract
+        {pending ? <BeatLoader size={10} color="white" /> : "Select Contract"}
       </button>
       {!isValidInput && (
         <Alert>
