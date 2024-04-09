@@ -1,26 +1,35 @@
 "use client";
-import { Rnd } from "react-rnd";
+import { useAtom } from "jotai";
+import { canvasComponentsAtom } from "../utils.ts/atoms";
+import CanvasComponent from "../components/CanvasComponent";
+import { useEffect, useRef, useState } from "react";
+import SelectionArea from "../components/SelectionArea";
 
 const Canvas = () => {
-  return (
-    <div className="h-full w-4/5">
-      <Rnd
-        default={{
-          x: 0,
-          y: 0,
-          width: 320,
-          height: 200,
-        }}
-        bounds={"parent"}
-        resizeGrid={[25, 25]}
-        dragGrid={[25, 25]}
-        className="border border-gray-300 p-2"
-      >
-        <input
-          placeholder="Enter text here"
-          className="h-full w-full outline-none"
+  const [canvasComponents] = useAtom(canvasComponentsAtom);
+  const [activeComponents, setActiveComponents] = useState<string[]>([]);
+  const canvasRef = useRef<HTMLDivElement>(null);
+
+  const renderComponents = () => {
+    return canvasComponents.map((component) => {
+      return (
+        <CanvasComponent
+          key={component.id}
+          componentData={component}
+          activeComponents={activeComponents}
+          setActiveComponents={setActiveComponents}
         />
-      </Rnd>
+      );
+    });
+  };
+
+  return (
+    <div className="h-full w-4/5" ref={canvasRef}>
+      {renderComponents()}
+      <SelectionArea
+        canvasRef={canvasRef}
+        setActiveComponents={setActiveComponents}
+      />
     </div>
   );
 };

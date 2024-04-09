@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { ABI_METHOD } from "./interfaces";
+import { ABI_METHOD, COMPONENT } from "./interfaces";
 
 // the current contract address
 export const activeContractAtom = atom<string | null>(null);
@@ -9,3 +9,5 @@ export const activeSidebarViewAtom = atom<number>(0);
 export const abiReadMethodsAtom = atom<ABI_METHOD[]>([]);
 // the write methods of the contract
 export const abiWriteMethodsAtom = atom<ABI_METHOD[]>([]);
+// the components on the canvas
+export const canvasComponentsAtom = atom<COMPONENT[]>([]);
