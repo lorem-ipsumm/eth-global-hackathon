@@ -1,62 +1,90 @@
+"use client";
+
 import { useAtom } from "jotai";
-import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
 import { activeContractAtom, activeSidebarViewAtom } from "../utils.ts/atoms";
-import { useRef, useState } from "react";
-import { ethers } from "ethers";
+import { useState } from "react";
 import { useContractAbi } from "../hooks/useContractAbi";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "../../components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../components/ui/form";
+import { Input } from "../../components/ui/input";
 import { BeatLoader } from "react-spinners";
 
 const SelectContractView = () => {
-  const [pending, setPending] = useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
   const [, setActiveSidebarView] = useAtom(activeSidebarViewAtom);
   const [, setActiveContract] = useAtom(activeContractAtom);
 
-  const [isValidInput, setIsValidInput] = useState<boolean>(true);
-
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const { determineContractValidity } = useContractAbi();
 
-  const buttonClicked = async () => {
-    setPending(true);
-    if (!ethers.isAddress(inputRef.current!.value) || !inputRef.current) {
-      setIsValidInput(false);
+  const FormSchema = z.object({
+    contractAddress: z.string().length(42, {
+      message: "Invalid Address | Incorrect length",
+    }),
+  });
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      contractAddress: "",
+    },
+  });
+
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    setIsPending(true);
+    const isContract = await determineContractValidity(data.contractAddress);
+    setIsPending(false);
+    if (!isContract) {
+      form.setError("contractAddress", {
+        type: "validate",
+        message: "Invalid Address | Possibly EOA",
+      });
       return;
     }
-
-    const isContract = await determineContractValidity(inputRef.current!.value);
-
-    if (isContract) {
-      setActiveContract(inputRef.current!.value);
-      setActiveSidebarView(1);
-    } else {
-      setIsValidInput(false);
-    }
-    setPending(false);
+    setActiveContract(data.contractAddress);
+    setActiveSidebarView(1);
   };
 
   return (
     <div className="flex h-full flex-col items-center justify-center gap-3">
-      <input
-        type="text"
-        placeholder="Contract Address"
-        className="h-10 w-full rounded-md px-2"
-        ref={inputRef}
-      />
-      <button
-        onClick={buttonClicked}
-        className="flex h-10 w-full items-center justify-center rounded-md bg-blue-500 text-white transition-all hover:bg-blue-600"
-      >
-        {pending ? <BeatLoader size={10} color="white" /> : "Select Contract"}
-      </button>
-      {!isValidInput && (
-        <Alert>
-          <AlertTitle>Invalid Contract Address</AlertTitle>
-          <AlertDescription>
-            Please ensure you are entering a valid contract address.
-          </AlertDescription>
-        </Alert>
-      )}
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-2/3 space-y-6"
+        >
+          <FormField
+            control={form.control}
+            name="contractAddress"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Contract Address</FormLabel>
+                <FormControl>
+                  <Input placeholder="0x123..." {...field} />
+                </FormControl>
+                <FormDescription>Contract to Integrate with</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit">
+            {isPending ? (
+              <BeatLoader size={10} color="white" />
+            ) : (
+              "Select Contract"
+            )}
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 };
