@@ -43,15 +43,12 @@ export const useContractAbi = () => {
   const determineContractValidity = useCallback(async (address: string) => {
     try {
       const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY;
-      if (!apiKey) {
-        throw new Error("API key is not defined");
-      }
+
+      if (!apiKey) throw new Error("API key is not defined");
 
       const response = await fetchAbiRequest(address, apiKey);
 
-      if (response.data.status === "0") {
-        return false;
-      }
+      if (response.data.status === "0") return false;
 
       const { readMethods, writeMethods } = separateMethods(
         JSON.parse(response.data.result),

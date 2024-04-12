@@ -15,21 +15,15 @@ import {
 } from "../../components/ui/form";
 import { Input } from "../../components/ui/input";
 import { useContractAbi } from "../hooks/useContractAbi";
-import { ethers } from "ethers";
-
-const FormSchema = z.object({
-  contractAddress: z
-    .string()
-    .length(42, {
-      message: "Invalid Address | Incorrect length",
-    })
-    .refine((message) => !ethers.isAddress(message), {
-      message: "Invalid Address | Did not pass checksum validation",
-    }),
-});
 
 export const InputForm = () => {
   const { determineContractValidity } = useContractAbi();
+
+  const FormSchema = z.object({
+    contractAddress: z.string().length(42, {
+      message: "Invalid Address | Incorrect length",
+    }),
+  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -38,7 +32,17 @@ export const InputForm = () => {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {};
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    const isContract = await determineContractValidity(data.contractAddress);
+
+    if (!isContract) {
+      form.setError("contractAddress", {
+        type: "validate",
+        message: "Invalid Address | Possibly EOA",
+      });
+      return;
+    }
+  };
 
   return (
     <Form {...form}>
