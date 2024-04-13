@@ -33,7 +33,12 @@ const SelectContractView = () => {
       message: "Invalid Address | Incorrect length",
     }),
     isProxy: z.boolean(),
-    contractImplementation: z.string().nullable(),
+    contractImplementation: z.union([
+      z.string().length(0),
+      z.string().length(42, {
+        message: "Invalid Address | Incorrect length",
+      }),
+    ]),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -49,24 +54,33 @@ const SelectContractView = () => {
   const isProxy = watch("isProxy");
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    console.log("test");
     setIsPending(true);
+
     let isContract;
+
     if (!isProxy && !data.contractImplementation) {
       isContract = await determineContractValidity(data.contractAddress);
+
+      if (!isContract) {
+        form.setError("contractAddress", {
+          type: "validate",
+          message: "Invalid Address | Possibly EOA",
+        });
+      }
     } else {
       isContract = await determineContractValidity(
         data.contractImplementation!,
       );
+
+      if (!isContract) {
+        form.setError("contractImplementation", {
+          type: "validate",
+          message: "Invalid Address",
+        });
+      }
     }
     setIsPending(false);
-    if (!isContract) {
-      form.setError("contractAddress", {
-        type: "validate",
-        message: "Invalid Address | Possibly EOA",
-      });
-      return;
-    }
+    if (!isContract) return;
     setActiveContract(data.contractAddress);
     setActiveSidebarView(1);
   };
@@ -107,7 +121,7 @@ const SelectContractView = () => {
               </FormItem>
             )}
           />
-          {isProxy && (
+          {isProxy ? (
             <FormField
               control={form.control}
               name="contractImplementation"
@@ -124,6 +138,8 @@ const SelectContractView = () => {
                 </FormItem>
               )}
             />
+          ) : (
+            ""
           )}
           <Button type="submit">
             {isPending ? (
