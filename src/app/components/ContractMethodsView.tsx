@@ -111,6 +111,19 @@ const ContractMethodsView = () => {
       };
       children.push(component);
       newComponents = [...children];
+    } else {
+      // if it's a read method add a label
+      const component: COMPONENT = {
+        id: `label_${methodData.name}_${length++}`,
+        type: "label",
+        position: { x: 0, y: 0 },
+        size: { width: 100, height: 50 },
+        data: methodData,
+        parent: parentComponent.id,
+        children: [],
+      };
+      children.push(component);
+      newComponents = [...children];
     }
 
     // update parent component with children
