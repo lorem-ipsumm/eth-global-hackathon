@@ -32,10 +32,8 @@ const SelectContractView = () => {
     contractAddress: z.string().length(42, {
       message: "Invalid Address | Incorrect length",
     }),
-    contractImplementation: z.string().length(42, {
-      message: "Invalid Address | Incorrect length",
-    }),
     isProxy: z.boolean(),
+    contractImplementation: z.string().nullable(),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -46,16 +44,20 @@ const SelectContractView = () => {
       isProxy: false,
     },
   });
+
   const { watch } = form;
   const isProxy = watch("isProxy");
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    console.log("test");
     setIsPending(true);
     let isContract;
     if (!isProxy && !data.contractImplementation) {
       isContract = await determineContractValidity(data.contractAddress);
     } else {
-      isContract = await determineContractValidity(data.contractImplementation);
+      isContract = await determineContractValidity(
+        data.contractImplementation!,
+      );
     }
     setIsPending(false);
     if (!isContract) {
@@ -83,7 +85,7 @@ const SelectContractView = () => {
               <FormItem>
                 <FormLabel>Contract Address</FormLabel>
                 <FormControl>
-                  <Input placeholder="0x123..." {...field} />
+                  <Input {...field} />
                 </FormControl>
                 <FormDescription>Contract to Integrate with</FormDescription>
                 <FormMessage />
@@ -97,7 +99,10 @@ const SelectContractView = () => {
               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md">
                 <FormLabel>Is Contract a Proxy?</FormLabel>
                 <FormControl>
-                  <Checkbox onCheckedChange={field.onChange} />
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -110,7 +115,7 @@ const SelectContractView = () => {
                 <FormItem>
                   <FormLabel>Implementation Address</FormLabel>
                   <FormControl>
-                    <Input placeholder="0x123..." {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormDescription>
                     Implementation Contract to Fetch ABI
