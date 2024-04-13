@@ -115,7 +115,7 @@ const SelectContractView = () => {
                 <FormItem>
                   <FormLabel>Implementation Address</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value || ""} />
                   </FormControl>
                   <FormDescription>
                     Implementation Contract to Fetch ABI
