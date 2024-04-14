@@ -9,5 +9,6 @@ export const activeSidebarViewAtom = atom<number>(0);
 export const abiReadMethodsAtom = atom<ABI_METHOD[]>([]);
 // the write methods of the contract
 export const abiWriteMethodsAtom = atom<ABI_METHOD[]>([]);
+export const fullAbiAtom = atom<ABI_METHOD[]>([]);
 // the components on the canvas
 export const canvasComponentsAtom = atom<COMPONENT[]>([]);

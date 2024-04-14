@@ -6,6 +6,7 @@ const Input = ({ componentData }: COMPONENT_RENDER_PROPS) => {
     <input
       className={`border-2 border-slate-300 px-2 outline-none ${baseComponentStyle}`}
       placeholder={componentData.placeholder || ""}
+      id={componentData.id}
     />
   );
 };

@@ -43,7 +43,6 @@ const Label = ({ componentData }: COMPONENT_RENDER_PROPS) => {
       const siblings = parentComponent.children.filter(
         (child) => child.id !== componentData.id,
       );
-      console.log(siblings);
     }
   };
 
@@ -53,7 +52,9 @@ const Label = ({ componentData }: COMPONENT_RENDER_PROPS) => {
   };
 
   return (
-    <label className={`${baseComponentStyle}`}>{debouncedSearchTerm}</label>
+    <label className={`${baseComponentStyle}`} id={componentData.id}>
+      {debouncedSearchTerm}
+    </label>
   );
 };
 

@@ -2,13 +2,15 @@ import { useCallback } from "react";
 import axios from "axios";
 import { ABI_METHOD } from "../utils.ts/interfaces";
 import { useAtom } from "jotai";
-import { abiReadMethodsAtom, abiWriteMethodsAtom } from "../utils.ts/atoms";
+import { abiReadMethodsAtom, abiWriteMethodsAtom, fullAbiAtom } from "../utils.ts/atoms";
+import { set } from "react-hook-form";
 
 export const useContractAbi = () => {
   const [readMethods, setReadMethods] =
     useAtom<ABI_METHOD[]>(abiReadMethodsAtom);
   const [writeMethods, setWriteMethods] =
     useAtom<ABI_METHOD[]>(abiWriteMethodsAtom);
+  const [, setFullAbi] = useAtom(fullAbiAtom);
 
   const fetchAbiRequest = async (address: string, apiKey: string) => {
     const url = new URL("https://api.etherscan.io/api");
@@ -57,6 +59,7 @@ export const useContractAbi = () => {
       // Sets Global Atom ABI context if contract is valid (has ABI)
       setReadMethods(readMethods);
       setWriteMethods(writeMethods);
+      setFullAbi(JSON.parse(response.data.result));
 
       return true;
     } catch (e) {

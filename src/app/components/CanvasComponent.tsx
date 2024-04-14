@@ -12,6 +12,7 @@ import { useAtom } from "jotai";
 import Input from "./CanvasComponents/Input";
 import Button from "./CanvasComponents/Button";
 import Label from "./CanvasComponents/Label";
+import Wrapper from "./CanvasComponents/Wrapper";
 
 interface CanvasComponentProps {
   componentData: COMPONENT;
@@ -88,6 +89,9 @@ const CanvasComponent = ({
     if (componentData.type === "button") {
       return <Button componentData={componentData} />;
     }
+    if (componentData.type === "wrapper") {
+      return <Wrapper componentData={componentData} />;
+    }
   };
 
   // update the component position on drag stop
@@ -122,7 +126,6 @@ const CanvasComponent = ({
       resizeGrid={[25, 25]}
       dragGrid={[25, 25]}
       className={`${borderStyle} rounded-sm transition-[border]`}
-      id={componentData.id}
       onMouseDown={() => setActiveComponents([componentData.id])}
       onResize={() => setActiveComponents([componentData.id])}
       onDrag={handleDrag}
