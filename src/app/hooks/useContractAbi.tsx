@@ -5,10 +5,8 @@ import { useAtom } from "jotai";
 import { abiReadMethodsAtom, abiWriteMethodsAtom } from "../utils.ts/atoms";
 
 export const useContractAbi = () => {
-  const [readMethods, setReadMethods] =
-    useAtom<ABI_METHOD[]>(abiReadMethodsAtom);
-  const [writeMethods, setWriteMethods] =
-    useAtom<ABI_METHOD[]>(abiWriteMethodsAtom);
+  const [, setReadMethods] = useAtom<ABI_METHOD[]>(abiReadMethodsAtom);
+  const [, setWriteMethods] = useAtom<ABI_METHOD[]>(abiWriteMethodsAtom);
 
   const fetchAbiRequest = async (address: string, apiKey: string) => {
     const url = new URL("https://api.etherscan.io/api");
@@ -64,5 +62,5 @@ export const useContractAbi = () => {
     }
   }, []);
 
-  return { determineContractValidity, readMethods, writeMethods };
+  return { determineContractValidity };
 };
