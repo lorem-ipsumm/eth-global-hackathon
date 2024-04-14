@@ -2,7 +2,7 @@
 import { useAtom } from "jotai";
 import { canvasComponentsAtom } from "../utils.ts/atoms";
 import CanvasComponent from "../components/CanvasComponent";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import SelectionArea from "../components/SelectionArea";
 
 const Canvas = () => {
