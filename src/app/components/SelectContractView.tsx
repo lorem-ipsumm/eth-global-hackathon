@@ -86,22 +86,23 @@ const SelectContractView = () => {
   };
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-2">
+    <div className="flex h-full items-center justify-center">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-3/4 space-y-6"
+          className="w-full space-y-6"
         >
           <FormField
             control={form.control}
             name="contractAddress"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Contract Address</FormLabel>
+                <FormLabel className="flex justify-center">
+                  Contract Address
+                </FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input placeholder="0x123..." {...field} />
                 </FormControl>
-                <FormDescription>Contract to Integrate with</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -111,7 +112,7 @@ const SelectContractView = () => {
             name="isProxy"
             render={({ field }) => (
               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md">
-                <FormLabel>Is Contract a Proxy?</FormLabel>
+                <FormLabel className="font-normal">Proxy?</FormLabel>
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -127,13 +128,12 @@ const SelectContractView = () => {
               name="contractImplementation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Implementation Address</FormLabel>
+                  <FormLabel className="flex justify-center">
+                    Implementation Address
+                  </FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value || ""} />
+                    <Input placeholder="0x123..." {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Implementation Contract to Fetch ABI
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -141,13 +141,15 @@ const SelectContractView = () => {
           ) : (
             ""
           )}
-          <Button type="submit">
-            {isPending ? (
-              <BeatLoader size={10} color="white" />
-            ) : (
-              "Select Contract"
-            )}
-          </Button>
+          <div className="flex items-center justify-center">
+            <Button type="submit">
+              {isPending ? (
+                <BeatLoader size={10} color="white" />
+              ) : (
+                "Select Contract"
+              )}
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
