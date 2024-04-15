@@ -1,10 +1,12 @@
-import { baseComponentStyle } from "~/app/utils.ts/constants";
 import { COMPONENT_RENDER_PROPS } from "~/app/utils.ts/interfaces";
+import { useComponentStyles } from "~/app/hooks/useComponentStyles";
 
 const Input = ({ componentData }: COMPONENT_RENDER_PROPS) => {
+  const { getDefaultStyles } = useComponentStyles();
+
   return (
     <input
-      className={`border-2 border-slate-300 px-2 outline-none ${baseComponentStyle}`}
+      className={getDefaultStyles("input")}
       placeholder={componentData.placeholder || ""}
     />
   );

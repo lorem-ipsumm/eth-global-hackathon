@@ -12,6 +12,7 @@ import { useAtom } from "jotai";
 import Input from "./CanvasComponents/Input";
 import Button from "./CanvasComponents/Button";
 import Label from "./CanvasComponents/Label";
+import { useComponentStyles } from "../hooks/useComponentStyles";
 
 interface CanvasComponentProps {
   componentData: COMPONENT;
@@ -29,6 +30,8 @@ const CanvasComponent = ({
   const borderStyle = activeComponents.includes(componentData.id)
     ? "border-2 border-blue-500"
     : "border-2 border-transparent";
+
+  const { defaultStyles } = useComponentStyles();
 
   const deleteComponent = () => {
     // delete the component from the canvas
@@ -109,7 +112,6 @@ const CanvasComponent = ({
     );
   };
 
-
   return (
     <Rnd
       default={{
@@ -130,7 +132,7 @@ const CanvasComponent = ({
     >
       <ContextMenu>
         <ContextMenuTrigger>
-          <div className="h-full w-full rounded-sm bg-slate-100">
+          <div className={defaultStyles.baseComponentParant}>
             {renderComponent()}
           </div>
         </ContextMenuTrigger>
