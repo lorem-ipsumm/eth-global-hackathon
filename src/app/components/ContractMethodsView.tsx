@@ -33,10 +33,19 @@ const ContractMethodsView = () => {
     );
   };
 
+  const repositionComponents = (components: COMPONENT[]) => {
+    let lastYCoordinate = 0;
+    components.forEach((component) => {
+      component.position = { x: 0, y: lastYCoordinate };
+      lastYCoordinate += 50;
+    });
+  };
+
   const addComponent = (methodData: ABI_METHOD) => {
-    let length = canvasComponents.length;
-    let children: COMPONENT[] = [];
     let newComponents: COMPONENT[] = [];
+    let children: COMPONENT[] = [];
+    let length = newComponents.length;
+
     const isReadMethod = !isWriteMethod(methodData);
 
     // create new component
@@ -82,10 +91,9 @@ const ContractMethodsView = () => {
       newComponents = [...children];
     }
 
-    // update parent component with children
     parentComponent.children = children;
-    // add component(s) to canvas
-    newComponents.push(parentComponent);
+    newComponents = [parentComponent, ...newComponents];
+    repositionComponents(newComponents);
     setCanvasComponents([...canvasComponents, ...newComponents]);
   };
 
