@@ -2,92 +2,26 @@
 import { TabsTrigger } from "@radix-ui/react-tabs";
 import { useState } from "react";
 import { Tabs, TabsList } from "~/components/ui/tabs";
-import { ABI_METHOD, COMPONENT } from "../utils.ts/interfaces";
+import { ABI_METHOD } from "../utils.ts/interfaces";
 import { PlusCircle } from "react-feather";
 import { useAtom } from "jotai";
-import {
-  abiReadMethodsAtom,
-  abiWriteMethodsAtom,
-  canvasComponentsAtom,
-} from "../utils.ts/atoms";
+import { abiReadMethodsAtom, abiWriteMethodsAtom } from "../utils.ts/atoms";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
+import { useCanvasWidget } from "../hooks/useCanvasWidget";
 
 const ContractMethodsView = () => {
   const [readMethods] = useAtom<ABI_METHOD[]>(abiReadMethodsAtom);
   const [writeMethods] = useAtom<ABI_METHOD[]>(abiWriteMethodsAtom);
-  const [canvasComponents, setCanvasComponents] = useAtom(canvasComponentsAtom);
 
   // state vars
   const [activeTab, setActiveTab] = useState<string>("read");
 
-  // check if method is a write method
-  const isWriteMethod = (methodData: ABI_METHOD) => {
-    return (
-      methodData.stateMutability === "payable" ||
-      methodData.stateMutability === "nonpayable"
-    );
-  };
-
-  const addComponent = (methodData: ABI_METHOD) => {
-    let length = canvasComponents.length;
-    let children: COMPONENT[] = [];
-    let newComponents: COMPONENT[] = [];
-    const isReadMethod = !isWriteMethod(methodData);
-
-    // create new component
-    const parentComponent: COMPONENT = {
-      id: `wrapper_${methodData.name}_${length++}`,
-      type: "wrapper",
-      position: { x: 0, y: 0 },
-      size: { width: 100, height: 50 },
-      styles: [],
-      data: methodData,
-      children: [],
-    };
-
-    // if there are params add them as children
-    methodData.inputs.forEach((param) => {
-      children.push({
-        id: `input_${param.name}_${length++}`,
-        type: "input",
-        position: { x: 0, y: 0 },
-        size: { width: 100, height: 50 },
-        styles: [],
-        data: param,
-        parent: parentComponent.id,
-        children: [],
-      });
-      newComponents = [...children];
-    });
-
-    // if it's a write method add a button
-    if (!isReadMethod) {
-      const component: COMPONENT = {
-        id: `button_${methodData.name}_${length++}`,
-        type: "button",
-        text: "Submit",
-        position: { x: 0, y: 0 },
-        size: { width: 100, height: 50 },
-        styles: [],
-        data: methodData,
-        parent: parentComponent.id,
-        children: [],
-      };
-      children.push(component);
-      newComponents = [...children];
-    }
-
-    // update parent component with children
-    parentComponent.children = children;
-    // add component(s) to canvas
-    newComponents.push(parentComponent);
-    setCanvasComponents([...canvasComponents, ...newComponents]);
-  };
+  const { createCanvasWidget } = useCanvasWidget();
 
   const renderTabs = () => {
     const tab = (label: string, tabValue: string) => (
@@ -143,7 +77,7 @@ const ContractMethodsView = () => {
     const addButton = (
       <div
         className="absolute flex h-full w-auto items-center justify-center"
-        onClick={() => addComponent(methodData)}
+        onClick={() => createCanvasWidget(methodData)}
       >
         <PlusCircle size={12} />
       </div>
