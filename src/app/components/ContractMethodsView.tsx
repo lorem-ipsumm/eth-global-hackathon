@@ -111,7 +111,7 @@ const ContractMethodsView = () => {
   };
 
   // render method params
-  const renderParams = (abiInputs: any[], abiOutputs: any[]) => {
+  const renderParams = (abiInputs: any[]) => {
     return (
       <div className="ml-4 flex flex-col gap-1 pt-4">
         {abiInputs.map((input, index) => (
@@ -119,7 +119,13 @@ const ContractMethodsView = () => {
             {input.name}: {input.type}
           </span>
         ))}
-        <span className="text-xs text-gray-500">------------------</span>
+      </div>
+    );
+  };
+
+  const renderReturnValues = (abiOutputs: any[]) => {
+    return (
+      <div className="ml-4 flex flex-col gap-1">
         {abiOutputs.map((output, index) => (
           <span key={index} className="text-xs text-gray-500">
             {output.name || "returns"}: {output.type}
@@ -128,7 +134,6 @@ const ContractMethodsView = () => {
       </div>
     );
   };
-
   // logic for individual methods
   const renderMethod = (methodData: ABI_METHOD) => {
     // layout for method
@@ -143,8 +148,26 @@ const ContractMethodsView = () => {
         <PlusCircle size={12} />
       </div>
     );
-    // if there are params render them in an accordion
-    if (methodData.inputs.length > 0) {
+
+    if (methodData.inputs.length > 0 && methodData.outputs.length > 0) {
+      return (
+        <AccordionItem
+          value={methodData.name}
+          key={methodData.name}
+          className="cursor-pointer rounded-sm p-2 hover:bg-slate-300"
+        >
+          <div className="relative flex items-center">
+            {addButton}
+            <AccordionTrigger className="p-0">{method}</AccordionTrigger>
+          </div>
+          <AccordionContent className="pb-0">
+            {renderParams(methodData.inputs)}
+            <span className="pl-4 text-gray-600">-------</span>
+            {renderReturnValues(methodData.outputs)}
+          </AccordionContent>
+        </AccordionItem>
+      );
+    } else if (methodData.inputs.length > 0) {
       return (
         <AccordionItem
           value={methodData.name}
@@ -156,7 +179,23 @@ const ContractMethodsView = () => {
             <AccordionTrigger className="p-0">{method}</AccordionTrigger>
           </div>
           <AccordionContent className="pb-2">
-            {renderParams(methodData.inputs, methodData.outputs)}
+            {renderParams(methodData.inputs)}
+          </AccordionContent>
+        </AccordionItem>
+      );
+    } else if (methodData.outputs.length > 0) {
+      return (
+        <AccordionItem
+          value={methodData.name}
+          key={methodData.name}
+          className="cursor-pointer rounded-sm p-2 hover:bg-slate-300"
+        >
+          <div className="relative flex items-center">
+            {addButton}
+            <AccordionTrigger className="p-0">{method}</AccordionTrigger>
+          </div>
+          <AccordionContent className="pb-2">
+            {renderReturnValues(methodData.outputs)}
           </AccordionContent>
         </AccordionItem>
       );
