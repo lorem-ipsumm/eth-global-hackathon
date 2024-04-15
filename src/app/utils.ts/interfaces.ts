@@ -7,19 +7,19 @@ export interface ABI_METHOD {
   type: string;
 }
 
-export interface COMPONENT {
+export interface WIDGET {
   id: string;
   type: "input" | "label" | "button" | "wrapper";
   text?: string;
   placeholder?: string;
   position: { x: number; y: number };
   size: { width: number; height: number };
-  children: COMPONENT[];
+  children: WIDGET[];
   parent?: string;
   styles: [];
   data: any;
 }
 
-export interface COMPONENT_RENDER_PROPS {
-  componentData: COMPONENT;
+export interface WIDGET_RENDER_PROPS {
+  widgetData: WIDGET;
 }

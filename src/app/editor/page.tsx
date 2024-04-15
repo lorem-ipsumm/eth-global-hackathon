@@ -3,11 +3,11 @@ import Canvas from "./Canvas";
 
 const Editor = () => {
   return (
-    <div className="w-screen h-screen flex">
-      <Canvas/>
-      <Sidebar/>
+    <div className="flex h-screen w-screen">
+      <Canvas />
+      <Sidebar />
     </div>
-  )
-}
+  );
+};
 
 export default Editor;
