@@ -25,40 +25,6 @@ const ContractMethodsView = () => {
   // state vars
   const [activeTab, setActiveTab] = useState<string>("read");
 
-  const renderTabs = () => {
-    const tab = (label: string, tabValue: string) => (
-      <TabsTrigger
-        className="h-full w-1/2 rounded-sm hover:bg-slate-200 data-[state=active]:bg-slate-300"
-        value={tabValue}
-        onClick={() => setActiveTab(tabValue)}
-      >
-        {label}
-      </TabsTrigger>
-    );
-
-    return (
-      <Tabs className="w-full" value={activeTab}>
-        <TabsList className="w-full gap-2">
-          {tab("Read", "read")}
-          {tab("Write", "write")}
-        </TabsList>
-      </Tabs>
-    );
-  };
-
-  // render method params
-  const renderParams = (params: any[]) => {
-    return (
-      <div className="ml-4 flex flex-col gap-1 pt-4">
-        {params.map((param, index) => (
-          <span key={index} className="text-xs text-gray-500">
-            {param.name}: {param.type}
-          </span>
-        ))}
-      </div>
-    );
-  };
-
   // check if method is a write method
   const isWriteMethod = (methodData: ABI_METHOD) => {
     return (
@@ -120,6 +86,46 @@ const ContractMethodsView = () => {
     setCanvasComponents([...canvasComponents, ...newComponents]);
   };
 
+  const renderTabs = () => {
+    const tab = (label: string, tabValue: string) => (
+      <TabsTrigger
+        className="h-full w-1/2 rounded-sm hover:bg-slate-200 data-[state=active]:bg-slate-300"
+        value={tabValue}
+        onClick={() => setActiveTab(tabValue)}
+      >
+        {label}
+      </TabsTrigger>
+    );
+
+    return (
+      <Tabs className="w-full" value={activeTab}>
+        <TabsList className="w-full gap-2">
+          {tab("Read", "read")}
+          {tab("Write", "write")}
+        </TabsList>
+      </Tabs>
+    );
+  };
+
+  // render method params
+  const renderParams = (abiInputs: any[], abiOutputs: any[]) => {
+    return (
+      <div className="ml-4 flex flex-col gap-1 pt-4">
+        {abiInputs.map((input, index) => (
+          <span key={index} className="text-xs text-gray-500">
+            {input.name}: {input.type}
+          </span>
+        ))}
+        <span className="text-xs text-gray-500">------------------</span>
+        {abiOutputs.map((output, index) => (
+          <span key={index} className="text-xs text-gray-500">
+            {output.name || "returns"}: {output.type}
+          </span>
+        ))}
+      </div>
+    );
+  };
+
   // logic for individual methods
   const renderMethod = (methodData: ABI_METHOD) => {
     // layout for method
@@ -147,7 +153,7 @@ const ContractMethodsView = () => {
             <AccordionTrigger className="p-0">{method}</AccordionTrigger>
           </div>
           <AccordionContent className="pb-2">
-            {renderParams(methodData.inputs)}
+            {renderParams(methodData.inputs, methodData.outputs)}
           </AccordionContent>
         </AccordionItem>
       );
