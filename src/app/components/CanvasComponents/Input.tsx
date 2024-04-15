@@ -6,7 +6,7 @@ const Input = ({ componentData }: COMPONENT_RENDER_PROPS) => {
 
   return (
     <input
-      className={getDefaultStyles("input")}
+      className={`${getDefaultStyles("input")} ${componentData.styles.length > 0 ? componentData.styles.join(" ") : null}`}
       placeholder={componentData.placeholder || ""}
     />
   );

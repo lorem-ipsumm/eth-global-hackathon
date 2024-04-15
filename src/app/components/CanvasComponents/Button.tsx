@@ -5,7 +5,11 @@ const Button = ({ componentData }: COMPONENT_RENDER_PROPS) => {
   const { getDefaultStyles } = useComponentStyles();
 
   return (
-    <button className={getDefaultStyles("button")}>{componentData.text}</button>
+    <button
+      className={`${getDefaultStyles("button")} ${componentData.styles.length > 0 ? componentData.styles.join(" ") : null}`}
+    >
+      {componentData.text}
+    </button>
   );
 };
 
