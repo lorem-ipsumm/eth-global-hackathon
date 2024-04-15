@@ -33,12 +33,40 @@ const ContractMethodsView = () => {
     );
   };
 
-  const repositionComponents = (components: COMPONENT[]) => {
-    let lastYCoordinate = 0;
-    components.forEach((component) => {
-      component.position = { x: 0, y: lastYCoordinate };
-      lastYCoordinate += 50;
+  const positionWidgetGrouping = (startingY: number, children: COMPONENT[]) => {
+    children.forEach((child) => {
+      child.position = { x: 0, y: startingY };
+      startingY += 50;
     });
+  };
+
+  const repositionComponents = (components: COMPONENT[]) => {
+    const startingPosition = { x: 0, y: 0 };
+
+    if (canvasComponents.length > 0) {
+      while (true) {
+        const isOccupied = canvasComponents.some(
+          (component) =>
+            component.position.x === startingPosition.x ||
+            component.position.y === startingPosition.y,
+        );
+
+        if (!isOccupied) {
+          positionWidgetGrouping(startingPosition.y, components);
+          break;
+        }
+
+        startingPosition.x += 50;
+        startingPosition.y += 50;
+
+        if (startingPosition.x > window.innerWidth) {
+          startingPosition.x = 0;
+          startingPosition.y += 50;
+        }
+      }
+    } else {
+      positionWidgetGrouping(0, components);
+    }
   };
 
   const addComponent = (methodData: ABI_METHOD) => {
