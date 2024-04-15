@@ -16,6 +16,7 @@ export interface COMPONENT {
   size: { width: number; height: number };
   children: COMPONENT[];
   parent?: string;
+  styles: [];
   data: any;
 }
 

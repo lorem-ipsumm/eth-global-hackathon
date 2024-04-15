@@ -45,6 +45,7 @@ const ContractMethodsView = () => {
       type: "wrapper",
       position: { x: 0, y: 0 },
       size: { width: 100, height: 50 },
+      styles: [],
       data: methodData,
       children: [],
     };
@@ -56,6 +57,7 @@ const ContractMethodsView = () => {
         type: "input",
         position: { x: 0, y: 0 },
         size: { width: 100, height: 50 },
+        styles: [],
         data: param,
         parent: parentComponent.id,
         children: [],
@@ -71,6 +73,7 @@ const ContractMethodsView = () => {
         text: "Submit",
         position: { x: 0, y: 0 },
         size: { width: 100, height: 50 },
+        styles: [],
         data: methodData,
         parent: parentComponent.id,
         children: [],
