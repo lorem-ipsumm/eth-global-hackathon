@@ -2,128 +2,26 @@
 import { TabsTrigger } from "@radix-ui/react-tabs";
 import { useState } from "react";
 import { Tabs, TabsList } from "~/components/ui/tabs";
-import { ABI_METHOD, COMPONENT } from "../utils.ts/interfaces";
+import { ABI_METHOD } from "../utils.ts/interfaces";
 import { PlusCircle } from "react-feather";
 import { useAtom } from "jotai";
-import {
-  abiReadMethodsAtom,
-  abiWriteMethodsAtom,
-  canvasComponentsAtom,
-} from "../utils.ts/atoms";
+import { abiReadMethodsAtom, abiWriteMethodsAtom } from "../utils.ts/atoms";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
+import { useCanvasWidget } from "../hooks/useCanvasWidget";
 
 const ContractMethodsView = () => {
   const [readMethods] = useAtom<ABI_METHOD[]>(abiReadMethodsAtom);
   const [writeMethods] = useAtom<ABI_METHOD[]>(abiWriteMethodsAtom);
-  const [canvasComponents, setCanvasComponents] = useAtom(canvasComponentsAtom);
 
   // state vars
   const [activeTab, setActiveTab] = useState<string>("read");
 
-  // check if method is a write method
-  const isWriteMethod = (methodData: ABI_METHOD) => {
-    return (
-      methodData.stateMutability === "payable" ||
-      methodData.stateMutability === "nonpayable"
-    );
-  };
-
-  const positionWidgetGrouping = (startingY: number, children: COMPONENT[]) => {
-    children.forEach((child) => {
-      child.position = { x: 0, y: startingY };
-      startingY += 50;
-    });
-  };
-
-  const repositionComponents = (components: COMPONENT[]) => {
-    const startingPosition = { x: 0, y: 0 };
-
-    if (canvasComponents.length > 0) {
-      while (true) {
-        const isOccupied = canvasComponents.some(
-          (component) =>
-            component.position.x === startingPosition.x ||
-            component.position.y === startingPosition.y,
-        );
-
-        if (!isOccupied) {
-          positionWidgetGrouping(startingPosition.y, components);
-          break;
-        }
-
-        startingPosition.x += 50;
-        startingPosition.y += 50;
-
-        if (startingPosition.x > window.innerWidth) {
-          startingPosition.x = 0;
-          startingPosition.y += 50;
-        }
-      }
-    } else {
-      positionWidgetGrouping(0, components);
-    }
-  };
-
-  const addComponent = (methodData: ABI_METHOD) => {
-    let newComponents: COMPONENT[] = [];
-    let children: COMPONENT[] = [];
-    let length = newComponents.length;
-
-    const isReadMethod = !isWriteMethod(methodData);
-
-    // create new component
-    const parentComponent: COMPONENT = {
-      id: `wrapper_${methodData.name}_${length++}`,
-      type: "wrapper",
-      position: { x: 0, y: 0 },
-      size: { width: 100, height: 50 },
-      styles: [],
-      data: methodData,
-      children: [],
-    };
-
-    // if there are params add them as children
-    methodData.inputs.forEach((param) => {
-      children.push({
-        id: `input_${param.name}_${length++}`,
-        type: "input",
-        position: { x: 0, y: 0 },
-        size: { width: 100, height: 50 },
-        styles: [],
-        data: param,
-        parent: parentComponent.id,
-        children: [],
-      });
-      newComponents = [...children];
-    });
-
-    // if it's a write method add a button
-    if (!isReadMethod) {
-      const component: COMPONENT = {
-        id: `button_${methodData.name}_${length++}`,
-        type: "button",
-        text: "Submit",
-        position: { x: 0, y: 0 },
-        size: { width: 100, height: 50 },
-        styles: [],
-        data: methodData,
-        parent: parentComponent.id,
-        children: [],
-      };
-      children.push(component);
-      newComponents = [...children];
-    }
-
-    parentComponent.children = children;
-    newComponents = [parentComponent, ...newComponents];
-    repositionComponents(newComponents);
-    setCanvasComponents([...canvasComponents, ...newComponents]);
-  };
+  const { createCanvasWidget } = useCanvasWidget();
 
   const renderTabs = () => {
     const tab = (label: string, tabValue: string) => (
@@ -179,7 +77,7 @@ const ContractMethodsView = () => {
     const addButton = (
       <div
         className="absolute flex h-full w-auto items-center justify-center"
-        onClick={() => addComponent(methodData)}
+        onClick={() => createCanvasWidget(methodData)}
       >
         <PlusCircle size={12} />
       </div>
