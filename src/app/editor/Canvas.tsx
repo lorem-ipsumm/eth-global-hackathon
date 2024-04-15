@@ -1,23 +1,23 @@
 "use client";
 import { useAtom } from "jotai";
-import { canvasComponentsAtom } from "../utils.ts/atoms";
-import CanvasComponent from "../components/CanvasComponent";
+import { canvasWidgetsAtom } from "../utils.ts/atoms";
+import CanvasWidgetParent from "../components/CanvasWidgetParent";
 import { useRef, useState } from "react";
 import SelectionArea from "../components/SelectionArea";
 
 const Canvas = () => {
-  const [canvasComponents] = useAtom(canvasComponentsAtom);
-  const [activeComponents, setActiveComponents] = useState<string[]>([]);
+  const [canvasWidgets] = useAtom(canvasWidgetsAtom);
+  const [activeWidgets, setActiveWidgets] = useState<string[]>([]);
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  const renderComponents = () => {
-    return canvasComponents.map((component) => {
+  const renderWidgets = () => {
+    return canvasWidgets.map((widget) => {
       return (
-        <CanvasComponent
-          key={component.id}
-          componentData={component}
-          activeComponents={activeComponents}
-          setActiveComponents={setActiveComponents}
+        <CanvasWidgetParent
+          key={widget.id}
+          widgetData={widget}
+          activeWidgets={activeWidgets}
+          setActiveWidgets={setActiveWidgets}
         />
       );
     });
@@ -25,10 +25,10 @@ const Canvas = () => {
 
   return (
     <div className="h-full w-4/5" ref={canvasRef}>
-      {renderComponents()}
+      {renderWidgets()}
       <SelectionArea
         canvasRef={canvasRef}
-        setActiveComponents={setActiveComponents}
+        setActiveWidgets={setActiveWidgets}
       />
     </div>
   );

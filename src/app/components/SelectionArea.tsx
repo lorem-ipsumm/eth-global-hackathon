@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
-import { canvasComponentsAtom } from "../utils.ts/atoms";
+import { canvasWidgetsAtom } from "../utils.ts/atoms";
 
 interface SELECTION_AREA {
   x: number;
@@ -11,18 +11,18 @@ interface SELECTION_AREA {
 
 interface PROPS {
   canvasRef: any;
-  setActiveComponents: Function;
+  setActiveWidgets: Function;
 }
 
-const SelectionArea = ({ canvasRef, setActiveComponents }: PROPS) => {
-  const [canvasComponents] = useAtom(canvasComponentsAtom);
+const SelectionArea = ({ canvasRef, setActiveWidgets }: PROPS) => {
+  const [canvasWidgets] = useAtom(canvasWidgetsAtom);
   const [selectionArea, setSelectionArea] = useState<SELECTION_AREA | null>(
     null,
   );
 
   useEffect(() => {
     const handleMouseDown = (e: any) => {
-      // don't enable selection if the user is clicking on a component
+      // don't enable selection if the user is clicking on a widget
       if (e.target !== canvasRef.current) return;
       setSelectionArea({ x: e.clientX, y: e.clientY, width: 0, height: 0 });
     };
@@ -38,11 +38,11 @@ const SelectionArea = ({ canvasRef, setActiveComponents }: PROPS) => {
     };
 
     const handleMouseUp = () => {
-      // Here you can check which components are within the selection area
+      // Here you can check which widget are within the selection area
       // and mark them as selected.
       if (selectionArea) {
-        const selectedComponents = canvasComponents.filter((component) => {
-          const element = document.getElementById(component.id);
+        const selectedWidgets = canvasWidgets.filter((widget) => {
+          const element = document.getElementById(widget.id);
           if (!element) return false;
           const rect = element.getBoundingClientRect();
           const elementX = rect.left;
@@ -56,10 +56,7 @@ const SelectionArea = ({ canvasRef, setActiveComponents }: PROPS) => {
           return inXRange && inYRange;
         });
 
-        // Set the selected components as active
-        setActiveComponents(
-          selectedComponents.map((component) => component.id),
-        );
+        setActiveWidgets(selectedWidgets.map((widget) => widget.id));
       }
 
       // Clear the selection area
