@@ -20,7 +20,7 @@ interface CanvasWidgetProps {
   setActiveWidgets: Function;
 }
 
-const CanvasWidget = ({
+const CanvasWidgetOuter = ({
   widgetData,
   activeWidgets,
   setActiveWidgets,
@@ -34,9 +34,16 @@ const CanvasWidget = ({
   const { defaultStyles } = useWidgetStyles();
 
   const deleteWidget = () => {
-    const widget = canvasWidgets.find((widget) => widget.id === widgetData.id);
-    if (widget)
-      setCanvasWidgets(canvasWidgets.filter((w) => w.id !== widgetData.id));
+    const flatWidgets = canvasWidgets.flatMap((widgetGroup) => widgetGroup);
+    const widget = flatWidgets.find((widget) => widget.id === widgetData.id);
+
+    if (widget) {
+      setCanvasWidgets(
+        canvasWidgets.map((widgetGroup) =>
+          widgetGroup.filter((w) => w.id !== widgetData.id),
+        ),
+      );
+    }
     setActiveWidgets([]);
   };
 
@@ -57,24 +64,26 @@ const CanvasWidget = ({
     const movementY = e.movementY;
 
     if (children.length > 0) {
-      const updatedWidgets = canvasWidgets.map((widget) => {
-        if (children.includes(widget.id)) {
-          return {
-            ...widget,
-            position: {
-              x: widget.position.x + movementX,
-              y: widget.position.y + movementY,
-            },
-          };
-        }
-        return widget;
-      });
+      const updatedWidgets = canvasWidgets.map((widgetGroup) =>
+        widgetGroup.map((widget) => {
+          if (children.includes(widget.id)) {
+            return {
+              ...widget,
+              position: {
+                x: widget.position.x + movementX,
+                y: widget.position.y + movementY,
+              },
+            };
+          }
+          return widget;
+        }),
+      );
 
       setCanvasWidgets(updatedWidgets);
     }
   };
 
-  const renderWidget = () => {
+  const setWidgetType = () => {
     if (widgetData.type === "input") {
       return <Input widgetData={widgetData} />;
     }
@@ -96,8 +105,10 @@ const CanvasWidget = ({
       },
     };
     setCanvasWidgets(
-      canvasWidgets.map((widget) =>
-        widget.id === widgetData.id ? updatedWidget : widget,
+      canvasWidgets.map((widgetGroup) =>
+        widgetGroup.map((widget) =>
+          widget.id === widgetData.id ? updatedWidget : widget,
+        ),
       ),
     );
   };
@@ -122,7 +133,9 @@ const CanvasWidget = ({
     >
       <ContextMenu>
         <ContextMenuTrigger>
-          <div className={defaultStyles.baseWidgetParant}>{renderWidget()}</div>
+          <div className={defaultStyles.baseWidgetParant}>
+            {setWidgetType()}
+          </div>
         </ContextMenuTrigger>
         {renderContextMenuContent()}
       </ContextMenu>
@@ -130,4 +143,4 @@ const CanvasWidget = ({
   );
 };
 
-export default CanvasWidget;
+export default CanvasWidgetOuter;
