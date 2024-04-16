@@ -80,7 +80,7 @@ export const useCanvasWidget = () => {
         position: { x: 0, y: 0 },
         size: { width: 100, height: 50 },
         styles: [],
-        data: param,
+        data: methodData,
         parent: parentWidget.id,
         children: [],
       });
