@@ -41,20 +41,22 @@ const SelectionArea = ({ canvasRef, setActiveWidgets }: PROPS) => {
       // Here you can check which widget are within the selection area
       // and mark them as selected.
       if (selectionArea) {
-        const selectedWidgets = canvasWidgets.filter((widget) => {
-          const element = document.getElementById(widget.id);
-          if (!element) return false;
-          const rect = element.getBoundingClientRect();
-          const elementX = rect.left;
-          const elementY = rect.top;
-          const inXRange =
-            elementX >= selectionArea.x &&
-            elementX <= selectionArea.x + selectionArea.width;
-          const inYRange =
-            elementY >= selectionArea.y &&
-            elementY <= selectionArea.y + selectionArea.height;
-          return inXRange && inYRange;
-        });
+        const selectedWidgets = canvasWidgets.flatMap((widgetGroup) =>
+          widgetGroup.filter((widget) => {
+            const element = document.getElementById(widget.id);
+            if (!element) return false;
+            const rect = element.getBoundingClientRect();
+            const elementX = rect.left;
+            const elementY = rect.top;
+            const inXRange =
+              elementX >= selectionArea.x &&
+              elementX <= selectionArea.x + selectionArea.width;
+            const inYRange =
+              elementY >= selectionArea.y &&
+              elementY <= selectionArea.y + selectionArea.height;
+            return inXRange && inYRange;
+          }),
+        );
 
         setActiveWidgets(selectedWidgets.map((widget) => widget.id));
       }

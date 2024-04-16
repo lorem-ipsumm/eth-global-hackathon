@@ -10,4 +10,4 @@ export const abiReadMethodsAtom = atom<ABI_METHOD[]>([]);
 // the write methods of the contract
 export const abiWriteMethodsAtom = atom<ABI_METHOD[]>([]);
 // the widget on the canvas
-export const canvasWidgetsAtom = atom<WIDGET[]>([]);
+export const canvasWidgetsAtom = atom<Array<WIDGET>[]>([[]]);

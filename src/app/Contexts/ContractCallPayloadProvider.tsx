@@ -1,18 +1,18 @@
 // ContractCallPayloadContext.tsx
-import { createContext, useState, FC, ReactNode } from "react";
+import { createContext, useState, FC, ReactNode, useEffect } from "react";
 
-export const contractCallPayloadContext = createContext<any>({});
+export const ContractCallPayloadContext = createContext<any>(null);
 
 export const ContractCallPayloadProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [contractCallPayload, setContractCallPayload] = useState<any>({});
+  const [contractCallPayload, setContractCallPayload] = useState({});
 
   return (
-    <contractCallPayloadContext.Provider
+    <ContractCallPayloadContext.Provider
       value={{ contractCallPayload, setContractCallPayload }}
     >
       {children}
-    </contractCallPayloadContext.Provider>
+    </ContractCallPayloadContext.Provider>
   );
 };

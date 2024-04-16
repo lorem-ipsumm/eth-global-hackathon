@@ -1,9 +1,10 @@
 "use client";
 import { useAtom } from "jotai";
 import { canvasWidgetsAtom } from "../utils.ts/atoms";
-import CanvasWidgetParent from "../components/CanvasWidgetParent";
+import CanvasWidgetOuter from "../components/CanvasWidgetOuter";
 import { useRef, useState } from "react";
 import SelectionArea from "../components/SelectionArea";
+import { ContractCallPayloadProvider } from "../Contexts/ContractCallPayloadProvider";
 
 const Canvas = () => {
   const [canvasWidgets] = useAtom(canvasWidgetsAtom);
@@ -11,16 +12,18 @@ const Canvas = () => {
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const renderWidgets = () => {
-    return canvasWidgets.map((widget) => {
-      return (
-        <CanvasWidgetParent
-          key={widget.id}
-          widgetData={widget}
-          activeWidgets={activeWidgets}
-          setActiveWidgets={setActiveWidgets}
-        />
-      );
-    });
+    return canvasWidgets.map((widgetGroup, groupIndex) => (
+      <ContractCallPayloadProvider key={groupIndex}>
+        {widgetGroup.map((widget) => (
+          <CanvasWidgetOuter
+            key={widget.id}
+            widgetData={widget}
+            activeWidgets={activeWidgets}
+            setActiveWidgets={setActiveWidgets}
+          />
+        ))}
+      </ContractCallPayloadProvider>
+    ));
   };
 
   return (
