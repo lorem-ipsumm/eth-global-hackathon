@@ -17,9 +17,12 @@ export const useCanvasWidget = () => {
     yCoord: number,
     newWidgets: WIDGET[],
   ) => {
-    newWidgets.forEach((widget) => {
-      if (widget.type !== "wrapper") {
-        widget.position = { x: parentXCoort + 25, y: yCoord };
+    newWidgets.forEach((widget, cnt) => {
+      if (widget.type === "input") {
+        widget.position = { x: parentXCoort + 25, y: yCoord + 25 };
+        yCoord += 50;
+      } else if (widget.type === "label") {
+        widget.position = { x: parentXCoort + 100, y: yCoord + 25 };
         yCoord += 50;
       } else {
         widget.position = { x: parentXCoort, y: yCoord };
@@ -77,7 +80,7 @@ export const useCanvasWidget = () => {
       id: `wrapper_${methodData.name}_${length++}`,
       type: "wrapper",
       position: { x: 0, y: 0 },
-      size: { width: 100, height: 50 },
+      size: { width: 250, height: 50 },
       styles: [],
       data: methodData,
       children: [],
@@ -89,7 +92,7 @@ export const useCanvasWidget = () => {
         id: `input_${param.name}_${length++}`,
         type: "input",
         position: { x: 0, y: 0 },
-        size: { width: 100, height: 50 },
+        size: { width: 250, height: 50 },
         styles: [],
         data: methodData,
         parent: parentWidget.id,
