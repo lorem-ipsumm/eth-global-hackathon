@@ -98,6 +98,20 @@ export const useCanvasWidget = () => {
       newWidgets = [...children];
     });
 
+    methodData.outputs.forEach((returnVal) => {
+      children.push({
+        id: `label_${returnVal.name}_${length++}`,
+        type: "label",
+        position: { x: 0, y: 0 },
+        size: { width: 100, height: 50 },
+        styles: [],
+        data: methodData,
+        parent: parentWidget.id,
+        children: [],
+      });
+      newWidgets = [...children];
+    });
+
     // if it's a write method add a button
     if (!isReadMethod) {
       const widget: WIDGET = {
