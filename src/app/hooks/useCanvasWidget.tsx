@@ -22,12 +22,14 @@ export const useCanvasWidget = () => {
   const repositionWidgets = (widgets: WIDGET[]) => {
     const startingPosition = { x: 0, y: 0 };
 
-    if (canvasWidgets.length > 0) {
+    if (getTotalWidgetCount() > 0) {
       while (true) {
-        const isOccupied = canvasWidgets.some(
-          (widget) =>
-            widget.position.x === startingPosition.x ||
-            widget.position.y === startingPosition.y,
+        const isOccupied = canvasWidgets.some((widgetGroup) =>
+          widgetGroup.some(
+            (widget) =>
+              widget.position.x === startingPosition.x ||
+              widget.position.y === startingPosition.y,
+          ),
         );
 
         if (!isOccupied) {
@@ -46,6 +48,10 @@ export const useCanvasWidget = () => {
     } else {
       positionWidgetGrouping(0, widgets);
     }
+  };
+
+  const getTotalWidgetCount = () => {
+    return canvasWidgets.reduce((acc, curr) => acc + curr.length, 0);
   };
 
   const createCanvasWidget = (methodData: ABI_METHOD) => {
@@ -74,7 +80,7 @@ export const useCanvasWidget = () => {
         position: { x: 0, y: 0 },
         size: { width: 100, height: 50 },
         styles: [],
-        data: param,
+        data: methodData,
         parent: parentWidget.id,
         children: [],
       });
@@ -101,8 +107,8 @@ export const useCanvasWidget = () => {
     parentWidget.children = children;
     newWidgets = [parentWidget, ...newWidgets];
     repositionWidgets(newWidgets);
-    setCanvasWidgets([...canvasWidgets, ...newWidgets]);
+    setCanvasWidgets([...canvasWidgets, newWidgets]);
   };
 
-  return { createCanvasWidget };
+  return { createCanvasWidget, getTotalWidgetCount };
 };

@@ -26,12 +26,14 @@ export const useWidgetStyles = () => {
   };
 
   const updateWidgetStyle = (widgetId: string, newStyles: any) => {
-    const updatedWidgets = canvasWidgets.map((widget) => {
-      if (widget.id === widgetId) {
-        return { ...widget, styles: newStyles };
-      }
-      return widget;
-    });
+    const updatedWidgets = canvasWidgets.map((widgetGroup) =>
+      widgetGroup.map((widget) => {
+        if (widget.id === widgetId) {
+          return { ...widget, styles: newStyles };
+        }
+        return widget;
+      }),
+    );
     setCanvasWidgets(updatedWidgets);
   };
 
