@@ -5,9 +5,13 @@ const Label = ({ widgetData }: WIDGET_RENDER_PROPS) => {
   const { getDefaultStyles } = useWidgetStyles();
 
   return (
-    <label
+    <div
       className={`${getDefaultStyles("label")} ${widgetData.styles.length > 0 ? widgetData.styles.join(" ") : null}`}
-    />
+    >
+      <p>
+        {widgetData.externalValue ? widgetData.externalValue : widgetData.type}
+      </p>
+    </div>
   );
 };
 
