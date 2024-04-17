@@ -18,6 +18,7 @@ export interface WIDGET {
   parent?: string;
   styles: [];
   data: any;
+  externalValue?: string;
 }
 
 export interface WIDGET_RENDER_PROPS {
