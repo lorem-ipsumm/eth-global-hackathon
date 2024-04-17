@@ -18,10 +18,12 @@ const Input = ({ widgetData }: WIDGET_RENDER_PROPS) => {
 
   useEffect(() => {
     (async () => {
-      await callContract(
-        activeContract!,
-        widgetData.data.name,
-        contractCallPayload,
+      console.log(
+        await callContract(
+          activeContract!,
+          widgetData.data.name,
+          contractCallPayload,
+        ),
       );
     })();
   }, [contractCallPayload]);
