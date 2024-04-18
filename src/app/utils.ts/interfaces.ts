@@ -1,9 +1,9 @@
 export interface ABI_METHOD {
   constant: boolean;
   name: string;
-  inputs: any[]; string;
+  inputs: any[];
+  stateMutability: string;
   outputs: any[];
-  stateMutability:
   type: string;
 }
 
