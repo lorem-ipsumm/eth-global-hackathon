@@ -113,6 +113,40 @@ const CanvasWidgetOuter = ({
     );
   };
 
+  const handleResizeStop = (e: any, direction: any, ref: any, delta: any) => {
+    let x = widgetData.position.x;
+    let y = widgetData.position.y;
+    // update x and y position based on the direction and delta
+    if (direction.includes("right")) {
+      x = widgetData.position.x;
+    } else if (direction.includes("left")) {
+      x = widgetData.position.x - delta.width;
+    }
+    if (direction.includes("bottom")) {
+      y = widgetData.position.y;
+    } else if (direction.includes("top")) {
+      y = widgetData.position.y - delta.height;
+    }
+    const updatedWidget = {
+      ...widgetData,
+      position: {
+        x,
+        y
+      },
+      size: {
+        width: ref.style.width,
+        height: ref.style.height,
+      },
+    };
+    setCanvasWidgets(
+      canvasWidgets.map((widgetGroup) =>
+        widgetGroup.map((widget) =>
+          widget.id === widgetData.id ? updatedWidget : widget,
+        ),
+      ),
+    );
+  }
+
   return (
     <Rnd
       default={{
@@ -128,6 +162,7 @@ const CanvasWidgetOuter = ({
       id={widgetData.id}
       onMouseDown={() => setActiveWidgets([widgetData.id])}
       onResize={() => setActiveWidgets([widgetData.id])}
+      onResizeStop={handleResizeStop}
       onDrag={handleDrag}
       onDragStop={handleDragStop}
     >
