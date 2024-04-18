@@ -16,17 +16,17 @@ const Input = ({ widgetData }: WIDGET_RENDER_PROPS) => {
     ContractCallPayloadContext,
   );
 
-  useEffect(() => {
-    (async () => {
-      console.log(
-        await callContract(
-          activeContract!,
-          widgetData.data.name,
-          contractCallPayload,
-        ),
-      );
-    })();
-  }, [contractCallPayload]);
+  // useEffect(() => {
+  //   (async () => {
+  //     console.log(
+  //       await callContract(
+  //         activeContract!,
+  //         widgetData.data.name,
+  //         contractCallPayload,
+  //       ),
+  //     );
+  //   })();
+  // }, [contractCallPayload]);
 
   const handleSearch = useDebounce((term: any) => {
     setContextValsAndCallContract(term);

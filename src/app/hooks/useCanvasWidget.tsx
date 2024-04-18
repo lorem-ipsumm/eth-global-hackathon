@@ -12,46 +12,60 @@ export const useCanvasWidget = () => {
     );
   };
 
-  const positionWidgetGrouping = (startingY: number, children: WIDGET[]) => {
-    children.forEach((child) => {
-      child.position = { x: 0, y: startingY };
-      startingY += 50;
+  const positionWidgetGrouping = (
+    parentXCoort: number,
+    yCoord: number,
+    newWidgets: WIDGET[],
+  ) => {
+    newWidgets.forEach((widget, cnt) => {
+      if (widget.type === "input") {
+        widget.position = { x: parentXCoort + 25, y: yCoord + 25 };
+        yCoord += 50;
+      } else if (widget.type === "label") {
+        widget.position = { x: parentXCoort + 100, y: yCoord + 25 };
+        yCoord += 50;
+      } else {
+        widget.position = { x: parentXCoort, y: yCoord };
+      }
     });
   };
 
-  const repositionWidgets = (widgets: WIDGET[]) => {
-    const startingPosition = { x: 0, y: 0 };
+  const getUnoccupiedCoordinatesForWrapper = () => {
+    const startingPosition = { parentX: 0, parentY: 0 };
+
+    const parentWidgets = getCanvasWrapperWidgets();
 
     if (getTotalWidgetCount() > 0) {
-      while (true) {
-        const isOccupied = canvasWidgets.some((widgetGroup) =>
-          widgetGroup.some(
-            (widget) =>
-              widget.position.x === startingPosition.x ||
-              widget.position.y === startingPosition.y,
-          ),
-        );
+      parentWidgets.forEach((parentWidget) => {
+        const parentWidgetArea =
+          parentWidget!.size.width * parentWidget!.size.height;
+        while (
+          startingPosition.parentX === parentWidget!.position.x &&
+          startingPosition.parentX <=
+            parentWidget!.position.x + parentWidgetArea &&
+          startingPosition.parentY === parentWidget!.position.y &&
+          startingPosition.parentY <=
+            parentWidget!.position.y + parentWidgetArea
+        ) {
+          startingPosition.parentX += 50;
+          startingPosition.parentY += 50;
 
-        if (!isOccupied) {
-          positionWidgetGrouping(startingPosition.y, widgets);
-          break;
+          if (startingPosition.parentX > window.innerWidth) {
+            startingPosition.parentX = 0;
+            startingPosition.parentY += 50;
+          }
         }
-
-        startingPosition.x += 50;
-        startingPosition.y += 50;
-
-        if (startingPosition.x > window.innerWidth) {
-          startingPosition.x = 0;
-          startingPosition.y += 50;
-        }
-      }
-    } else {
-      positionWidgetGrouping(0, widgets);
+      });
     }
+    return startingPosition;
   };
 
   const getTotalWidgetCount = () => {
     return canvasWidgets.reduce((acc, curr) => acc + curr.length, 0);
+  };
+
+  const getCanvasWrapperWidgets = () => {
+    return canvasWidgets.map((widgetGroup) => widgetGroup[0]).filter(Boolean);
   };
 
   const createCanvasWidget = (methodData: ABI_METHOD) => {
@@ -66,7 +80,7 @@ export const useCanvasWidget = () => {
       id: `wrapper_${methodData.name}_${length++}`,
       type: "wrapper",
       position: { x: 0, y: 0 },
-      size: { width: 100, height: 50 },
+      size: { width: 250, height: 50 },
       styles: [],
       data: methodData,
       children: [],
@@ -78,9 +92,24 @@ export const useCanvasWidget = () => {
         id: `input_${param.name}_${length++}`,
         type: "input",
         position: { x: 0, y: 0 },
+        size: { width: 250, height: 50 },
+        styles: [],
+        data: methodData,
+        parent: parentWidget.id,
+        children: [],
+      });
+      newWidgets = [...children];
+    });
+
+    methodData.outputs.forEach((returnVal) => {
+      children.push({
+        id: `label_${returnVal.name}_${length++}`,
+        type: "label",
+        position: { x: 0, y: 0 },
         size: { width: 100, height: 50 },
         styles: [],
         data: methodData,
+        externalValue: "",
         parent: parentWidget.id,
         children: [],
       });
@@ -104,11 +133,17 @@ export const useCanvasWidget = () => {
       newWidgets = [...children];
     }
 
+    parentWidget.size.height = (newWidgets.length + 1) * 50;
+    parentWidget.size.width += 50;
     parentWidget.children = children;
     newWidgets = [parentWidget, ...newWidgets];
-    repositionWidgets(newWidgets);
+
+    const { parentX, parentY } = getUnoccupiedCoordinatesForWrapper();
+
+    positionWidgetGrouping(parentX, parentY, newWidgets);
+
     setCanvasWidgets([...canvasWidgets, newWidgets]);
   };
 
-  return { createCanvasWidget, getTotalWidgetCount };
+  return { createCanvasWidget, getTotalWidgetCount, getCanvasWrapperWidgets };
 };
