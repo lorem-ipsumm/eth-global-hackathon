@@ -8,7 +8,7 @@ export const useWidgetStyles = () => {
     baseWidgetParant: "h-full w-full rounded-sm bg-slate-100",
     baseWidgetStyle: "w-full h-full rounded-sm",
     label:
-      "border-2 border-slate-300 px-2 text-center text-sm flex items-center justify-center",
+      "border-2 border-slate-300 px-2 text-center text-sm flex items-center justify-center overflow-hidden",
     input: "border-2 border-slate-300 px-2 outline-none",
     button: "select-none",
   };
