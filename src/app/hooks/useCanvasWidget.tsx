@@ -71,7 +71,7 @@ export const useCanvasWidget = () => {
   const createCanvasWidget = (methodData: ABI_METHOD) => {
     let newWidgets: WIDGET[] = [];
     let children: WIDGET[] = [];
-    let length = newWidgets.length;
+    let length = getTotalWidgetCount();
 
     const isReadMethod = !isWriteMethod(methodData);
 
@@ -109,7 +109,7 @@ export const useCanvasWidget = () => {
         size: { width: 100, height: 50 },
         styles: [],
         data: methodData,
-        externalValue: "",
+        externalValue: null,
         parent: parentWidget.id,
         children: [],
       });

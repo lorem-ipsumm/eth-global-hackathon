@@ -34,16 +34,11 @@ const CanvasWidgetOuter = ({
   const { defaultStyles } = useWidgetStyles();
 
   const deleteWidget = () => {
-    const flatWidgets = canvasWidgets.flatMap((widgetGroup) => widgetGroup);
-    const widget = flatWidgets.find((widget) => widget.id === widgetData.id);
+    const newCanvasWidgets = canvasWidgets.map((widgetGroup) =>
+      widgetGroup.filter((widget) => !activeWidgets.includes(widget.id)),
+    );
 
-    if (widget) {
-      setCanvasWidgets(
-        canvasWidgets.map((widgetGroup) =>
-          widgetGroup.filter((w) => w.id !== widgetData.id),
-        ),
-      );
-    }
+    setCanvasWidgets(newCanvasWidgets);
     setActiveWidgets([]);
   };
 
@@ -131,7 +126,7 @@ const CanvasWidgetOuter = ({
       ...widgetData,
       position: {
         x,
-        y
+        y,
       },
       size: {
         width: ref.style.width,
@@ -145,7 +140,7 @@ const CanvasWidgetOuter = ({
         ),
       ),
     );
-  }
+  };
 
   return (
     <Rnd
@@ -160,8 +155,8 @@ const CanvasWidgetOuter = ({
       dragGrid={[25, 25]}
       className={`${borderStyle} rounded-sm transition-[border]`}
       id={widgetData.id}
-      onMouseDown={() => setActiveWidgets([widgetData.id])}
-      onResize={() => setActiveWidgets([widgetData.id])}
+      onMouseDown={() => setActiveWidgets([...activeWidgets, widgetData.id])}
+      onResize={() => setActiveWidgets([...activeWidgets, widgetData.id])}
       onResizeStop={handleResizeStop}
       onDrag={handleDrag}
       onDragStop={handleDragStop}

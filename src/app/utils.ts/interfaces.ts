@@ -18,7 +18,7 @@ export interface WIDGET {
   parent?: string;
   styles: [];
   data: any;
-  externalValue?: string;
+  externalValue?: null | string | number;
 }
 
 export interface WIDGET_RENDER_PROPS {
