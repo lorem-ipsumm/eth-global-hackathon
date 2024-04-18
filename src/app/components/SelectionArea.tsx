@@ -24,6 +24,8 @@ const SelectionArea = ({ canvasRef, setActiveWidgets }: PROPS) => {
     const handleMouseDown = (e: any) => {
       // don't enable selection if the user is clicking on a widget
       if (e.target !== canvasRef.current) return;
+
+      // Prevent deselection when right-clicking
       setSelectionArea({ x: e.clientX, y: e.clientY, width: 0, height: 0 });
     };
 
@@ -37,7 +39,7 @@ const SelectionArea = ({ canvasRef, setActiveWidgets }: PROPS) => {
       }
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (e: any) => {
       // Here you can check which widget are within the selection area
       // and mark them as selected.
       if (selectionArea) {
