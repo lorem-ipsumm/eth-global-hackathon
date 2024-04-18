@@ -2,6 +2,7 @@
 
 import { useAtom } from "jotai";
 import { useEffect } from "react";
+import ActionsBar from "~/app/components/ActionsBar";
 import Canvas from "~/app/editor/Canvas";
 import { useWidgetStorage } from "~/app/hooks/useWidgetStorage";
 import { canvasWidgetsAtom } from "~/app/utils.ts/atoms";
@@ -22,6 +23,7 @@ const Page = ({ params }: { params: { hash: string } }) => {
 
   return (
     <div className="h-screen w-screen">
+      <ActionsBar/>
       <Canvas />
     </div>
   );

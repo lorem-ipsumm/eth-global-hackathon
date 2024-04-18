@@ -1,15 +1,13 @@
-import PublishButton from "../components/PublishButton";
-import PublishModal from "../components/PublishModal";
+import ActionsBar from "../components/ActionsBar";
 import Sidebar from "../components/Sidebar";
 import Canvas from "./Canvas";
 
 const Editor = () => {
   return (
-    <div className="flex h-screen w-screen">
+    <div className="flex h-screen w-screen relative">
       <Canvas />
       <Sidebar />
-      <PublishButton/>
-      <PublishModal/>
+      <ActionsBar/>
     </div>
   );
 };
