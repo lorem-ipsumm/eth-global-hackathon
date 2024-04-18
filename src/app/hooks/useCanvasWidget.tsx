@@ -97,6 +97,7 @@ export const useCanvasWidget = () => {
         data: methodData,
         parent: parentWidget.id,
         children: [],
+        placeholder: param.name,
       });
       newWidgets = [...children];
     });
