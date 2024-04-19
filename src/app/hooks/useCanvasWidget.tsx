@@ -83,6 +83,7 @@ export const useCanvasWidget = () => {
       size: { width: 250, height: 50 },
       styles: [],
       data: methodData,
+      isWriteMethod: isWriteMethod(methodData),
       children: [],
     };
 
@@ -95,8 +96,10 @@ export const useCanvasWidget = () => {
         size: { width: 250, height: 50 },
         styles: [],
         data: methodData,
+        isWriteMethod: isWriteMethod(methodData),
         parent: parentWidget.id,
         children: [],
+        placeholder: param.name,
       });
       newWidgets = [...children];
     });
@@ -109,6 +112,7 @@ export const useCanvasWidget = () => {
         size: { width: 100, height: 50 },
         styles: [],
         data: methodData,
+        isWriteMethod: isWriteMethod(methodData),
         externalValue: null,
         parent: parentWidget.id,
         children: [],
@@ -126,6 +130,7 @@ export const useCanvasWidget = () => {
         size: { width: 100, height: 50 },
         styles: [],
         data: methodData,
+        isWriteMethod: isWriteMethod(methodData),
         parent: parentWidget.id,
         children: [],
       };

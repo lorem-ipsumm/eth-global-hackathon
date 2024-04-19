@@ -1,4 +1,6 @@
 import { Rnd } from "react-rnd";
+import { useContext, useEffect } from "react";
+import { ContractCallPayloadContext } from "../Contexts/ContractCallPayloadProvider";
 import { WIDGET } from "../utils.ts/interfaces";
 import {
   ContextMenu,
@@ -26,6 +28,13 @@ const CanvasWidgetOuter = ({
   setActiveWidgets,
 }: CanvasWidgetProps) => {
   const [canvasWidgets, setCanvasWidgets] = useAtom(canvasWidgetsAtom);
+  const { setIsWriteMethod, setMethodName } = useContext(
+    ContractCallPayloadContext,
+  );
+
+  useEffect(() => {
+    setIsWriteMethod(widgetData.isWriteMethod);
+  }, [widgetData]);
 
   const borderStyle = activeWidgets.includes(widgetData.id)
     ? "border-2 border-blue-500"

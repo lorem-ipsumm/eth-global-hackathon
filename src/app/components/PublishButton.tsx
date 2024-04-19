@@ -17,6 +17,7 @@ import { useRef, useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { Upload } from "react-feather";
 import Link from "next/link";
+let window:any = globalThis;
 
 const PublishButton = () => {
   const [publishStep, setPublishStep] = useState<number>(0);
