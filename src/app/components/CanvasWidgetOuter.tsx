@@ -28,9 +28,7 @@ const CanvasWidgetOuter = ({
   setActiveWidgets,
 }: CanvasWidgetProps) => {
   const [canvasWidgets, setCanvasWidgets] = useAtom(canvasWidgetsAtom);
-  const { setIsWriteMethod, setMethodName } = useContext(
-    ContractCallPayloadContext,
-  );
+  const { setIsWriteMethod } = useContext(ContractCallPayloadContext);
 
   const { defaultStyles } = useWidgetStyles();
 
@@ -152,7 +150,7 @@ const CanvasWidgetOuter = ({
   };
 
   const handleMouseDownClick = (e: any) => {
-    if (e.button === 0 && activeWidgets.length <= 2) {
+    if (e.button === 0 && activeWidgets.length < 2) {
       setActiveWidgets([widgetData.id]);
     } else if (e.button === 2) {
       setActiveWidgets([...activeWidgets, widgetData.id]);

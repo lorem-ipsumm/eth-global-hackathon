@@ -31,7 +31,6 @@ const Canvas = () => {
       {renderWidgets()}
       <SelectionArea
         canvasRef={canvasRef}
-        activeWidgets={activeWidgets}
         setActiveWidgets={setActiveWidgets}
       />
     </div>
