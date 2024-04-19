@@ -17,11 +17,11 @@ export const useCanvasWidget = () => {
     yCoord: number,
     newWidgets: WIDGET[],
   ) => {
-    newWidgets.forEach((widget, cnt) => {
+    newWidgets.forEach((widget) => {
       if (widget.type === "input") {
         widget.position = { x: parentXCoort + 25, y: yCoord + 25 };
         yCoord += 50;
-      } else if (widget.type === "label") {
+      } else if (widget.type === "label" || widget.type === "button") {
         widget.position = { x: parentXCoort + 100, y: yCoord + 25 };
         yCoord += 50;
       } else {
