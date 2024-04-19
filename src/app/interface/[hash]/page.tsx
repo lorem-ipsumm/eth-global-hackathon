@@ -16,7 +16,9 @@ const Page = ({ params }: { params: { hash: string } }) => {
   }, []);
 
   const loadWidgets = async () => {
+    console.log("loading widgets");
     const widgets = await storage.loadWidgetData(params.hash);
+    console.log(widgets);
     if (widgets) setCanvasWidgets(widgets);
   };
 
