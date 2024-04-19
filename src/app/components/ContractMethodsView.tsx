@@ -13,13 +13,16 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 import { useCanvasWidget } from "../hooks/useCanvasWidget";
+import MiscellaneousView from "./MiscellaneousView";
+
+type ACTIVE_TAB = "read" | "write" | "misc";
 
 const ContractMethodsView = () => {
   const [readMethods] = useAtom<ABI_METHOD[]>(abiReadMethodsAtom);
   const [writeMethods] = useAtom<ABI_METHOD[]>(abiWriteMethodsAtom);
 
   // state vars
-  const [activeTab, setActiveTab] = useState<string>("read");
+  const [activeTab, setActiveTab] = useState<ACTIVE_TAB>("read");
 
   const { createCanvasWidget } = useCanvasWidget();
 
@@ -28,7 +31,7 @@ const ContractMethodsView = () => {
       <TabsTrigger
         className="h-full w-1/2 rounded-sm hover:bg-slate-200 data-[state=active]:bg-slate-300"
         value={tabValue}
-        onClick={() => setActiveTab(tabValue)}
+        onClick={() => setActiveTab(tabValue as ACTIVE_TAB)}
       >
         {label}
       </TabsTrigger>
@@ -39,6 +42,7 @@ const ContractMethodsView = () => {
         <TabsList className="w-full gap-2">
           {tab("Read", "read")}
           {tab("Write", "write")}
+          {tab("Misc", "misc")}
         </TabsList>
       </Tabs>
     );
@@ -147,16 +151,20 @@ const ContractMethodsView = () => {
   };
 
   const renderMethods = () => {
-    // get methods based on active tab
-    const methods = activeTab === "read" ? readMethods : writeMethods;
-    return (
-      <Accordion
-        type="multiple"
-        className="mt-3 flex flex-col gap-2 overflow-y-auto"
-      >
-        {methods.map((method) => renderMethod(method))}
-      </Accordion>
-    );
+    if (activeTab === "misc") {
+      return <MiscellaneousView/>
+    } else {
+      // get methods based on active tab
+      const methods = activeTab === "read" ? readMethods : writeMethods;
+      return (
+        <Accordion
+          type="multiple"
+          className="mt-3 flex flex-col gap-2 overflow-y-auto"
+        >
+          {methods.map((method) => renderMethod(method))}
+        </Accordion>
+      );
+    }
   };
 
   return (

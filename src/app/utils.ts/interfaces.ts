@@ -9,7 +9,7 @@ export interface ABI_METHOD {
 
 export interface WIDGET {
   id: string;
-  type: "input" | "label" | "button" | "wrapper";
+  type: "input" | "label" | "button" | "wrapper" | "text" | "rectangle" | "image";
   text?: string;
   placeholder?: string;
   position: { x: number; y: number };
@@ -19,6 +19,7 @@ export interface WIDGET {
   styles: [];
   data: any;
   externalValue?: null | string | number;
+  defaultValue?: string;
   isWriteMethod?: boolean;
 }
 

@@ -15,3 +15,5 @@ export const fullAbiAtom = atom<any>(null);
 export const canvasWidgetsAtom = atom<Array<WIDGET>[]>([[]]);
 // the users connected wallet
 export const walletAtom = atom<any>(null);
+// the active widget
+export const activeWidgetsAtom = atom<string[]>([]);

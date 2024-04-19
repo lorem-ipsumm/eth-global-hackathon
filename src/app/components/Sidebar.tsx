@@ -5,9 +5,7 @@ import { useAtom } from "jotai";
 import { activeSidebarViewAtom } from "../utils.ts/atoms";
 
 const Sidebar = () => {
-  const [activeSidebarView, setActiveSidebarView] = useAtom(
-    activeSidebarViewAtom,
-  );
+  const [activeSidebarView] = useAtom(activeSidebarViewAtom);
 
   const views = [<SelectContractView />, <ContractMethodsView />];
 

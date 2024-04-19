@@ -15,6 +15,10 @@ import Input from "./CanvasWidgets/Input";
 import Button from "./CanvasWidgets/Button";
 import Label from "./CanvasWidgets/Label";
 import { useWidgetStyles } from "../hooks/useWidgetStyles";
+import Text from "./CanvasWidgets/Text";
+import Rectangle from "./CanvasWidgets/Rectangle";
+import Image from "./CanvasWidgets/Image";
+import { usePathname } from "next/navigation";
 
 interface CanvasWidgetProps {
   widgetData: WIDGET;
@@ -27,6 +31,7 @@ const CanvasWidgetOuter = ({
   activeWidgets,
   setActiveWidgets,
 }: CanvasWidgetProps) => {
+  const pathname = usePathname();
   const [canvasWidgets, setCanvasWidgets] = useAtom(canvasWidgetsAtom);
   const { setIsWriteMethod } = useContext(ContractCallPayloadContext);
 
@@ -95,6 +100,18 @@ const CanvasWidgetOuter = ({
     if (widgetData.type === "button") {
       return <Button widgetData={widgetData} />;
     }
+    if (widgetData.type === "text") {
+      return <Text widgetData={widgetData} />;
+    }
+    if (widgetData.type === "rectangle") {
+      return <Rectangle widgetData={widgetData} />;
+    }
+    if (widgetData.type === "image") {
+      return <Image widgetData={widgetData} />;
+    }
+    if (widgetData.type === "wrapper") {
+      return <div className={defaultStyles.wrapper} />;
+    }
   };
 
   const handleDragStop = (e: any, d: any) => {
@@ -149,12 +166,23 @@ const CanvasWidgetOuter = ({
     );
   };
 
-  const handleMouseDownClick = (e: any) => {
+  const handleMouseDown = (e:any) => {
+    if (pathname !== "/editor") return;
+    setActiveWidgets([...activeWidgets, widgetData.id]);
     if (e.button === 0 && activeWidgets.length < 2) {
       setActiveWidgets([widgetData.id]);
     } else if (e.button === 2) {
       setActiveWidgets([...activeWidgets, widgetData.id]);
     }
+
+  const handleResize = () => {
+    if (pathname !== "/editor") return;
+    setActiveWidgets([...activeWidgets, widgetData.id]);
+  };
+
+  const getResizeGrid = () => {
+    if (pathname !== "/editor") return [0, 0];
+    return [25, 25];
   };
 
   return (
@@ -166,22 +194,21 @@ const CanvasWidgetOuter = ({
         height: widgetData.size.height,
       }}
       bounds={"parent"}
-      resizeGrid={[25, 25]}
+      // @ts-ignore
+      resizeGrid={getResizeGrid()}
       dragGrid={[25, 25]}
       className={`${borderStyle} rounded-sm transition-[border]`}
       id={widgetData.id}
-      onMouseDown={handleMouseDownClick}
-      onResize={() => setActiveWidgets([...activeWidgets, widgetData.id])}
+      onMouseDown={handleMouseDown}
+      onResize={handleResize}
       onResizeStop={handleResizeStop}
       onDrag={handleDrag}
       onDragStop={handleDragStop}
+      disableDragging={pathname !== "/editor"}
+      resizeable={pathname === "/editor"}
     >
       <ContextMenu>
-        <ContextMenuTrigger>
-          <div className={defaultStyles.baseWidgetParant}>
-            {setWidgetType()}
-          </div>
-        </ContextMenuTrigger>
+        <ContextMenuTrigger>{setWidgetType()}</ContextMenuTrigger>
         {renderContextMenuContent()}
       </ContextMenu>
     </Rnd>

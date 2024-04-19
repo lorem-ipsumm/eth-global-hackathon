@@ -16,8 +16,7 @@ import { canvasWidgetsAtom } from "../utils.ts/atoms";
 import { useRef, useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { Upload } from "react-feather";
-import Link from "next/link";
-let window:any = globalThis;
+let window: any = globalThis;
 
 const PublishButton = () => {
   const [publishStep, setPublishStep] = useState<number>(0);
@@ -88,9 +87,11 @@ const PublishButton = () => {
       navigator.clipboard.writeText(interfaceUrl);
     };
 
-    const getInterfaceUrl = () => {
-      return new URL(`${window.location.host}/interface/${interfaceHashRef.current}`);
-    };
+    const viewInterface = (e: any) => {
+      e.preventDefault();
+      // navigate to the interface page in a new tab
+      window.open(`/interface/${interfaceHashRef.current}`, "_blank");
+    }
 
     return (
       <>
@@ -108,19 +109,17 @@ const PublishButton = () => {
         </AlertDialogDescription>
         <AlertDialogFooter>
           <AlertDialogAction
-            className="bg-blue-500"
+            className="bg-blue-500 hover:bg-blue-600"
+            onClick={viewInterface}
+          >
+            View Interface
+          </AlertDialogAction>
+          <AlertDialogAction
+            className="bg-blue-500 hover:bg-blue-600"
             onClick={copyUrlToClipboard}
           >
             Copy Interface URL
           </AlertDialogAction>
-          {/* <Link href={getInterfaceUrl()}>
-            <AlertDialogAction
-              className="bg-blue-500"
-              onClick={(e) => e.preventDefault()}
-            >
-              View Interface
-            </AlertDialogAction>
-          </Link> */}
           <AlertDialogAction onClick={() => setPublishStep(0)}>
             Close
           </AlertDialogAction>
