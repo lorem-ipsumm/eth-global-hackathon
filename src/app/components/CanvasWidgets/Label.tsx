@@ -3,9 +3,14 @@ import { useWidgetStyles } from "~/app/hooks/useWidgetStyles";
 import { useContext, useEffect } from "react";
 import { ContractCallPayloadContext } from "~/app/Contexts/ContractCallPayloadProvider";
 import { useState } from "react";
+import { useContractCall } from "~/app/hooks/useCallContract";
+import { useAtom } from "jotai";
+import { activeContractAtom } from "~/app/utils.ts/atoms";
 
 const Label = ({ widgetData }: WIDGET_RENDER_PROPS) => {
   const { getDefaultStyles } = useWidgetStyles();
+  const { callContract } = useContractCall();
+  const [activeContract] = useAtom(activeContractAtom);
 
   const { contractCallReturnData } = useContext(ContractCallPayloadContext);
   const [externalValue, setExternalValue] = useState(widgetData.externalValue);
@@ -14,6 +19,22 @@ const Label = ({ widgetData }: WIDGET_RENDER_PROPS) => {
     setExternalValue(contractCallReturnData);
     widgetData.externalValue = contractCallReturnData;
   }, [contractCallReturnData]);
+
+  useEffect(() => {
+    if (widgetData.data.inputs.length > 0) return;
+    (async () => {
+      try {
+        const value = await callContract(
+          activeContract!,
+          widgetData.data.name,
+          {},
+        );
+        setExternalValue(value);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, []);
 
   const displayValue = () => {
     try {
