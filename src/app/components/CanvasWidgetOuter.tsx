@@ -166,7 +166,7 @@ const CanvasWidgetOuter = ({
     );
   };
 
-  const handleMouseDown = (e:any) => {
+  const handleMouseDown = (e: any) => {
     if (pathname !== "/editor") return;
     setActiveWidgets([...activeWidgets, widgetData.id]);
     if (e.button === 0 && activeWidgets.length < 2) {
@@ -174,6 +174,7 @@ const CanvasWidgetOuter = ({
     } else if (e.button === 2) {
       setActiveWidgets([...activeWidgets, widgetData.id]);
     }
+  };
 
   const handleResize = () => {
     if (pathname !== "/editor") return;
