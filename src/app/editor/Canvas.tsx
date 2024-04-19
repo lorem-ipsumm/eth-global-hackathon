@@ -1,6 +1,6 @@
 "use client";
 import { useAtom } from "jotai";
-import { canvasWidgetsAtom } from "../utils.ts/atoms";
+import { activeWidgetsAtom, canvasWidgetsAtom } from "../utils.ts/atoms";
 import CanvasWidgetOuter from "../components/CanvasWidgetOuter";
 import { useRef, useState } from "react";
 import SelectionArea from "../components/SelectionArea";
@@ -8,7 +8,7 @@ import { ContractCallPayloadProvider } from "../Contexts/ContractCallPayloadProv
 
 const Canvas = () => {
   const [canvasWidgets] = useAtom(canvasWidgetsAtom);
-  const [activeWidgets, setActiveWidgets] = useState<string[]>([]);
+  const [activeWidgets, setActiveWidgets] = useAtom(activeWidgetsAtom);
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const renderWidgets = () => {

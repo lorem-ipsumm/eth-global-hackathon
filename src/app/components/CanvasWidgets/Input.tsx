@@ -5,7 +5,7 @@ import { useDebounce } from "~/app/hooks/useDebounce";
 import { ContractCallPayloadContext } from "../../Contexts/ContractCallPayloadProvider";
 
 const Input = ({ widgetData }: WIDGET_RENDER_PROPS) => {
-  const [inputValue, setInputValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>(widgetData.defaultValue || "");
   const { getDefaultStyles } = useWidgetStyles();
 
   const handleSearch = useDebounce((term: any) => {

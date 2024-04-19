@@ -5,12 +5,15 @@ export const useWidgetStyles = () => {
   const [canvasWidgets, setCanvasWidgets] = useAtom(canvasWidgetsAtom);
 
   const defaultStyles = {
-    baseWidgetParant: "h-full w-full rounded-sm bg-slate-100",
-    baseWidgetStyle: "w-full h-full rounded-sm",
+    wrapper: "h-full w-full rounded-sm border border-slate-300",
+    baseWidgetStyle: "w-full h-full rounded-sm bg-slate-100",
     label:
       "border-2 border-slate-300 px-2 text-center text-sm flex items-center justify-center overflow-hidden",
-    input: "border-2 border-slate-300 px-2 outline-none",
-    button: "select-none",
+    input: "bg-slate-100 border-2 border-slate-300 px-2 outline-none",
+    button: "select-none !bg-blue-500 text-white font-bold",
+    rectangle: "!bg-slate-100 outline-none w-full h-full px-2 rounded-sm",
+    text: "bg-slate-400 text-center",
+    image: "bg-slate-100 rounded-sm",
   };
 
   const getDefaultStyles = (widgetType: string) => {
@@ -21,6 +24,12 @@ export const useWidgetStyles = () => {
         return `${defaultStyles.baseWidgetStyle} ${defaultStyles.input}`;
       case "button":
         return `${defaultStyles.baseWidgetStyle} ${defaultStyles.button}`;
+      case "text":
+        return `${defaultStyles.text}`;
+      case "rectangle":
+        return `${defaultStyles.rectangle}`;
+      case "image":
+        return `${defaultStyles.image}`;
       default:
         return "";
     }

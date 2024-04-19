@@ -15,6 +15,9 @@ import Input from "./CanvasWidgets/Input";
 import Button from "./CanvasWidgets/Button";
 import Label from "./CanvasWidgets/Label";
 import { useWidgetStyles } from "../hooks/useWidgetStyles";
+import Text from "./CanvasWidgets/Text";
+import Rectangle from "./CanvasWidgets/Rectangle";
+import Image from "./CanvasWidgets/Image";
 
 interface CanvasWidgetProps {
   widgetData: WIDGET;
@@ -97,6 +100,22 @@ const CanvasWidgetOuter = ({
     if (widgetData.type === "button") {
       return <Button widgetData={widgetData} />;
     }
+    if (widgetData.type === "text") {
+      return <Text widgetData={widgetData} />;
+    }
+    if (widgetData.type === "rectangle") {
+      return <Rectangle widgetData={widgetData} />;
+    }
+    if (widgetData.type === "image") {
+      return <Image widgetData={widgetData} />;
+    }
+    if (widgetData.type === "wrapper") {
+      return (
+        <div
+          className={defaultStyles.wrapper}
+        />
+      )
+    }
   };
 
   const handleDragStop = (e: any, d: any) => {
@@ -172,9 +191,7 @@ const CanvasWidgetOuter = ({
     >
       <ContextMenu>
         <ContextMenuTrigger>
-          <div className={defaultStyles.baseWidgetParant}>
             {setWidgetType()}
-          </div>
         </ContextMenuTrigger>
         {renderContextMenuContent()}
       </ContextMenu>
