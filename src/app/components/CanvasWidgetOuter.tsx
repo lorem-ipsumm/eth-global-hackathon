@@ -33,19 +33,17 @@ const CanvasWidgetOuter = ({
 }: CanvasWidgetProps) => {
   const pathname = usePathname();
   const [canvasWidgets, setCanvasWidgets] = useAtom(canvasWidgetsAtom);
-  const { setIsWriteMethod, setMethodName } = useContext(
-    ContractCallPayloadContext,
-  );
+  const { setIsWriteMethod } = useContext(ContractCallPayloadContext);
 
-  useEffect(() => {
-    setIsWriteMethod(widgetData.isWriteMethod);
-  }, [widgetData]);
+  const { defaultStyles } = useWidgetStyles();
 
   const borderStyle = activeWidgets.includes(widgetData.id)
     ? "border-2 border-blue-500"
     : "border-2 border-transparent";
 
-  const { defaultStyles } = useWidgetStyles();
+  useEffect(() => {
+    setIsWriteMethod(widgetData.isWriteMethod);
+  }, [widgetData]);
 
   const deleteWidget = () => {
     const newCanvasWidgets = canvasWidgets.map((widgetGroup) =>
@@ -168,9 +166,14 @@ const CanvasWidgetOuter = ({
     );
   };
 
-  const handleMouseDown = () => {
+  const handleMouseDown = (e: any) => {
     if (pathname !== "/editor") return;
     setActiveWidgets([...activeWidgets, widgetData.id]);
+    if (e.button === 0 && activeWidgets.length < 2) {
+      setActiveWidgets([widgetData.id]);
+    } else if (e.button === 2) {
+      setActiveWidgets([...activeWidgets, widgetData.id]);
+    }
   };
 
   const handleResize = () => {
