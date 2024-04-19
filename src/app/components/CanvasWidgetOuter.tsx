@@ -18,6 +18,7 @@ import { useWidgetStyles } from "../hooks/useWidgetStyles";
 import Text from "./CanvasWidgets/Text";
 import Rectangle from "./CanvasWidgets/Rectangle";
 import Image from "./CanvasWidgets/Image";
+import { usePathname } from "next/navigation";
 
 interface CanvasWidgetProps {
   widgetData: WIDGET;
@@ -30,6 +31,7 @@ const CanvasWidgetOuter = ({
   activeWidgets,
   setActiveWidgets,
 }: CanvasWidgetProps) => {
+  const pathname = usePathname();
   const [canvasWidgets, setCanvasWidgets] = useAtom(canvasWidgetsAtom);
   const { setIsWriteMethod, setMethodName } = useContext(
     ContractCallPayloadContext,
@@ -110,11 +112,7 @@ const CanvasWidgetOuter = ({
       return <Image widgetData={widgetData} />;
     }
     if (widgetData.type === "wrapper") {
-      return (
-        <div
-          className={defaultStyles.wrapper}
-        />
-      )
+      return <div className={defaultStyles.wrapper} />;
     }
   };
 
@@ -170,6 +168,21 @@ const CanvasWidgetOuter = ({
     );
   };
 
+  const handleMouseDown = () => {
+    if (pathname !== "/editor") return;
+    setActiveWidgets([...activeWidgets, widgetData.id]);
+  };
+
+  const handleResize = () => {
+    if (pathname !== "/editor") return;
+    setActiveWidgets([...activeWidgets, widgetData.id]);
+  };
+
+  const getResizeGrid = () => {
+    if (pathname !== "/editor") return [0, 0];
+    return [25, 25];
+  };
+
   return (
     <Rnd
       default={{
@@ -179,20 +192,21 @@ const CanvasWidgetOuter = ({
         height: widgetData.size.height,
       }}
       bounds={"parent"}
-      resizeGrid={[25, 25]}
+      // @ts-ignore
+      resizeGrid={getResizeGrid()}
       dragGrid={[25, 25]}
       className={`${borderStyle} rounded-sm transition-[border]`}
       id={widgetData.id}
-      onMouseDown={() => setActiveWidgets([...activeWidgets, widgetData.id])}
-      onResize={() => setActiveWidgets([...activeWidgets, widgetData.id])}
+      onMouseDown={handleMouseDown}
+      onResize={handleResize}
       onResizeStop={handleResizeStop}
       onDrag={handleDrag}
       onDragStop={handleDragStop}
+      disableDragging={pathname !== "/editor"}
+      resizeable={pathname === "/editor"}
     >
       <ContextMenu>
-        <ContextMenuTrigger>
-            {setWidgetType()}
-        </ContextMenuTrigger>
+        <ContextMenuTrigger>{setWidgetType()}</ContextMenuTrigger>
         {renderContextMenuContent()}
       </ContextMenu>
     </Rnd>

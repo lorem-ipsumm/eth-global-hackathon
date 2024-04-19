@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { findWidgetById } from "../utils.ts/utils";
 
 const MiscellaneousView = () => {
-  const [activeWidgets, setActiveWidgets] = useAtom(activeWidgetsAtom);
+  const [activeWidgets] = useAtom(activeWidgetsAtom);
   const [canvasWidgets, setCanvasWidgets] = useAtom(canvasWidgetsAtom);
 
   const [defaultValue, setDefaultValue] = useState<string>("");

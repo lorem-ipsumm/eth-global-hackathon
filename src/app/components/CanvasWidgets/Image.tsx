@@ -5,10 +5,12 @@ import { findWidgetById } from "~/app/utils.ts/utils";
 import { useAtom } from "jotai";
 import { canvasWidgetsAtom } from "~/app/utils.ts/atoms";
 import { Edit, Image as ImageIcon } from "react-feather";
+import { usePathname } from "next/navigation";
 
 const Image = ({ widgetData }: WIDGET_RENDER_PROPS) => {
   const [canvasWidgets, setCanvasWidgets] = useAtom(canvasWidgetsAtom);
   const { getDefaultStyles } = useWidgetStyles();
+  const pathname = usePathname();
 
   const [imgSrc, setImgSrc] = useState<string | null>(
     (widgetData.defaultValue as string) || null,
@@ -67,6 +69,7 @@ const Image = ({ widgetData }: WIDGET_RENDER_PROPS) => {
   };
 
   const renderOptions = () => {
+    if (pathname !== "/editor") return null;
     return (
       <div className="absolute bottom-1 right-1 flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 px-2">
         <Edit className="text-white" onClick={handleClick} />
@@ -76,7 +79,7 @@ const Image = ({ widgetData }: WIDGET_RENDER_PROPS) => {
 
   return (
     <div
-      className={`relative h-full w-full ${getDefaultStyles("image")} ${widgetData.styles.length > 0 ? widgetData.styles.join(" ") : null}`}
+      className={`relative h-full w-full overflow-hidden ${getDefaultStyles("image")} ${widgetData.styles.length > 0 ? widgetData.styles.join(" ") : null}`}
     >
       <input
         type="file"
