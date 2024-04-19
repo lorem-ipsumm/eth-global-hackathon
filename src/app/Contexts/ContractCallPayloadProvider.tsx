@@ -28,6 +28,7 @@ export const ContractCallPayloadProvider: FC<{ children: ReactNode }> = ({
           activeContract!,
           methodName,
           contractCallPayload,
+          true,
         );
         setContractCallReturnData(response);
       } catch (e) {

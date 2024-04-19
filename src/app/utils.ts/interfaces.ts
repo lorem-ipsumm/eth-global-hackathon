@@ -19,6 +19,7 @@ export interface WIDGET {
   styles: [];
   data: any;
   externalValue?: null | string | number;
+  isWriteMethod?: boolean;
 }
 
 export interface WIDGET_RENDER_PROPS {

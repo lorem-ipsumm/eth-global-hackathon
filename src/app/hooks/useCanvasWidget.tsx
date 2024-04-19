@@ -83,6 +83,7 @@ export const useCanvasWidget = () => {
       size: { width: 250, height: 50 },
       styles: [],
       data: methodData,
+      isWriteMethod: isWriteMethod(methodData),
       children: [],
     };
 
