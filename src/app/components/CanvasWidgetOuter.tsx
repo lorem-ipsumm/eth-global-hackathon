@@ -32,15 +32,15 @@ const CanvasWidgetOuter = ({
     ContractCallPayloadContext,
   );
 
-  useEffect(() => {
-    setIsWriteMethod(widgetData.isWriteMethod);
-  }, [widgetData]);
+  const { defaultStyles } = useWidgetStyles();
 
   const borderStyle = activeWidgets.includes(widgetData.id)
     ? "border-2 border-blue-500"
     : "border-2 border-transparent";
 
-  const { defaultStyles } = useWidgetStyles();
+  useEffect(() => {
+    setIsWriteMethod(widgetData.isWriteMethod);
+  }, [widgetData]);
 
   const deleteWidget = () => {
     const newCanvasWidgets = canvasWidgets.map((widgetGroup) =>
@@ -151,6 +151,14 @@ const CanvasWidgetOuter = ({
     );
   };
 
+  const handleMouseDownClick = (e: any) => {
+    if (e.button === 0 && activeWidgets.length <= 2) {
+      setActiveWidgets([widgetData.id]);
+    } else if (e.button === 2) {
+      setActiveWidgets([...activeWidgets, widgetData.id]);
+    }
+  };
+
   return (
     <Rnd
       default={{
@@ -164,7 +172,7 @@ const CanvasWidgetOuter = ({
       dragGrid={[25, 25]}
       className={`${borderStyle} rounded-sm transition-[border]`}
       id={widgetData.id}
-      onMouseDown={() => setActiveWidgets([...activeWidgets, widgetData.id])}
+      onMouseDown={handleMouseDownClick}
       onResize={() => setActiveWidgets([...activeWidgets, widgetData.id])}
       onResizeStop={handleResizeStop}
       onDrag={handleDrag}
