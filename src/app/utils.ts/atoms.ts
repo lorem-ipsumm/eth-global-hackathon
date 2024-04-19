@@ -13,3 +13,5 @@ export const abiWriteMethodsAtom = atom<ABI_METHOD[]>([]);
 export const fullAbiAtom = atom<any>(null);
 // the widget on the canvas
 export const canvasWidgetsAtom = atom<Array<WIDGET>[]>([[]]);
+// the users connected wallet
+export const walletAtom = atom<any>(null);
