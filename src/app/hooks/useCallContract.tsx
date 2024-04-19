@@ -7,9 +7,8 @@ import { useConnectWallet } from "@web3-onboard/react";
 export const useContractCall = () => {
   const [fullAbi] = useAtom<any>(fullAbiAtom);
 
-  const [{ wallet, connecting }, connect, disconnect] = useConnectWallet();
-  console.log("waasdfa", connecting);
-  console.log("wa;;et", wallet);
+  const [{ wallet }] = useConnectWallet();
+
   const callContract = useCallback(
     async (
       contractAddress: string,
@@ -17,6 +16,7 @@ export const useContractCall = () => {
       args: Object,
       isWriteMethod?: boolean,
     ) => {
+      console.log(contractAddress, methodName, args, isWriteMethod);
       try {
         if (!isWriteMethod) {
           const provider = new ethers.JsonRpcProvider(
@@ -31,10 +31,9 @@ export const useContractCall = () => {
             ...Object.values(args),
           );
         } else if (isWriteMethod && wallet) {
-          console.log("made it here");
-          const provider = new ethers.BrowserProvider(wallet!.provider);
+          console.log(2);
+          const provider = new ethers.BrowserProvider(wallet.provider);
           const signer = await provider.getSigner();
-          console.log("signer address", signer.address);
           const contract = new ethers.Contract(
             contractAddress,
             fullAbi,

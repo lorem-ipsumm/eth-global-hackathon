@@ -11,7 +11,7 @@ export const ContractCallPayloadProvider: FC<{ children: ReactNode }> = ({
 }) => {
   const [methodName, setMethodName] = useState<string>("");
   const [contractCallPayload, setContractCallPayload] = useState({});
-
+  const [isWriteMethod, setIsWriteMethod] = useState<boolean>(false);
   const [contractCallReturnData, setContractCallReturnData] = useState<
     string | null
   >(null);
@@ -20,7 +20,7 @@ export const ContractCallPayloadProvider: FC<{ children: ReactNode }> = ({
   const { callContract } = useContractCall();
 
   useEffect(() => {
-    if (!activeContract || !methodName) return;
+    if (!activeContract || !methodName || isWriteMethod) return;
 
     (async () => {
       try {
@@ -28,7 +28,7 @@ export const ContractCallPayloadProvider: FC<{ children: ReactNode }> = ({
           activeContract!,
           methodName,
           contractCallPayload,
-          true,
+          isWriteMethod,
         );
         setContractCallReturnData(response);
       } catch (e) {
@@ -44,6 +44,9 @@ export const ContractCallPayloadProvider: FC<{ children: ReactNode }> = ({
         setContractCallPayload,
         setMethodName,
         contractCallReturnData,
+        setContractCallReturnData,
+        isWriteMethod,
+        setIsWriteMethod,
       }}
     >
       {children}
