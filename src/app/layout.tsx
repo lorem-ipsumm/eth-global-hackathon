@@ -48,6 +48,7 @@ export default function RootLayout({
   useEffect(() => {
     if (wallet) setUserWallet(wallet);
     setOnboard(onboard);
+    console.log(onboard);
   }, [wallet]);
 
   return (
