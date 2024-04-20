@@ -6,6 +6,8 @@ import { activeWidgetsAtom, canvasWidgetsAtom } from "../utils.ts/atoms";
 import { WIDGET } from "../utils.ts/interfaces";
 import { useEffect, useState } from "react";
 import { findWidgetById } from "../utils.ts/utils";
+import { Button } from "~/components/ui/button";
+import { useWidgetStyles } from "../hooks/useWidgetStyles";
 
 const MiscellaneousView = () => {
   const [activeWidgets] = useAtom(activeWidgetsAtom);
@@ -13,6 +15,8 @@ const MiscellaneousView = () => {
 
   const [defaultValue, setDefaultValue] = useState<string>("");
   const [customCSS, setCustomCSS] = useState<string>("");
+
+  const { updateWidgetStyle } = useWidgetStyles();
 
   useEffect(() => {
     if (activeWidgets.length === 0) {
@@ -29,6 +33,17 @@ const MiscellaneousView = () => {
 
   const sectionTitle = (title: string) => {
     return <h3 className="mb-2 text-lg font-semibold">{title}</h3>;
+  };
+
+  const handleUpdateCss = () => {
+    const activeWidgetId = activeWidgets[0];
+    if (!activeWidgetId) return;
+    console.log("handleUpdateCss", customCSS);
+    updateWidgetStyle(activeWidgetId, customCSS);
+  };
+
+  const handleCustomCSSChange = (newCustomCSS: string) => {
+    setCustomCSS(newCustomCSS);
   };
 
   const renderWidgetProps = () => {
@@ -53,6 +68,7 @@ const MiscellaneousView = () => {
       });
       setCanvasWidgets(newWidgets);
     };
+
     const prop = (label: string, value: string, onChange: Function) => {
       return (
         <div className="flex flex-col">
@@ -65,6 +81,9 @@ const MiscellaneousView = () => {
             className="h-10 rounded-sm border border-gray-300 p-1 px-2"
             onChange={(e) => onChange(e.target.value)}
           />
+          {label === "Custom CSS" && (
+            <Button onClick={handleUpdateCss}>Apply</Button>
+          )}
         </div>
       );
     };
@@ -73,7 +92,7 @@ const MiscellaneousView = () => {
         {sectionTitle("Widget Props")}
         <div className="flex flex-col gap-2">
           {prop("Default Value", defaultValue, onDefaultValueChange)}
-          {prop("Custom CSS", customCSS, () => {})}
+          {prop("Custom CSS", customCSS, handleCustomCSSChange)}
         </div>
       </div>
     );

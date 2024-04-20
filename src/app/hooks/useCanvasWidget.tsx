@@ -75,7 +75,6 @@ export const useCanvasWidget = () => {
 
     const isReadMethod = !isWriteMethod(methodData);
 
-    // create new parent/wrapper widget
     const parentWidget: WIDGET = {
       id: `wrapper_${methodData.name}_${length++}`,
       type: "wrapper",
@@ -87,7 +86,6 @@ export const useCanvasWidget = () => {
       children: [],
     };
 
-    // if there are params add them as children
     methodData.inputs.forEach((param) => {
       children.push({
         id: `input_${param.name}_${length++}`,
