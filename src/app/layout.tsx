@@ -33,7 +33,7 @@ const chains = [
 const onboard = init({
   apiKey: process.env.NEXT_PUBLIC_ONBOARD_API_KEY,
   wallets,
-  chains
+  chains,
 });
 
 export default function RootLayout({
