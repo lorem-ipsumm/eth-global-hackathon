@@ -26,7 +26,7 @@ const chains = [
     id: 1,
     token: "ETH",
     label: "Ethereum Mainnet",
-    rpcUrl: process.env.NEXT_PUBLIC_ETHEREUM_RPC_URL,
+    rpcUrl: process.env.NEXT_PUBLIC_ARBITRUM_RPC_URL,
   },
 ];
 

@@ -14,7 +14,7 @@ export const useContractAbi = () => {
   const [, setFullAbi] = useAtom<any>(fullAbiAtom);
 
   const fetchAbiRequest = async (address: string, apiKey: string) => {
-    const url = new URL("https://api.etherscan.io/api");
+    const url = new URL("https://api.arbiscan.io/api");
     url.searchParams.append("module", "contract");
     url.searchParams.append("action", "getabi");
     url.searchParams.append("address", address);
@@ -47,7 +47,7 @@ export const useContractAbi = () => {
 
   const determineContractValidity = useCallback(async (address: string) => {
     try {
-      const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY;
+      const apiKey = process.env.NEXT_PUBLIC_ARBISCAN_API_KEY;
 
       if (!apiKey) throw new Error("API key is not defined");
 

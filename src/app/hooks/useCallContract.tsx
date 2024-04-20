@@ -10,7 +10,7 @@ export const useContractCall = () => {
   const fullAbiRef = useRef(null);
 
   // this is kind of wacky but I don't feel like
-  // figuring out the ins and outs of react to 
+  // figuring out the ins and outs of react to
   // get the wallet and fullAbi to be available
   useEffect(() => {
     if (wallet) walletRef.current = wallet;
@@ -29,7 +29,7 @@ export const useContractCall = () => {
       try {
         if (!isWriteMethod && fullAbiRef.current) {
           provider = new ethers.JsonRpcProvider(
-            process.env.NEXT_PUBLIC_ETHEREUM_RPC_URL,
+            process.env.NEXT_PUBLIC_ARBITRUM_RPC_URL,
           );
           const fullAbi: any = fullAbiRef.current;
           contract = new ethers.Contract(contractAddress, fullAbi, provider);
