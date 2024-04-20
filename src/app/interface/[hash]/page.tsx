@@ -48,10 +48,9 @@ const Interface = ({ params }: { params: { hash: string } }) => {
 
   return (
     <div className="h-screen w-screen">
-      {/* <ActionsBar/>
+      <ActionsBar/>
       <Canvas />
-      {renderLoader()} */}
-      interface
+      {renderLoader()}
     </div>
   );
 };
