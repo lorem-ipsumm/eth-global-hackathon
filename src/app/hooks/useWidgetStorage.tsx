@@ -8,6 +8,10 @@ export const useWidgetStorage = () => {
     widgets: WIDGET[][]
   ) => {
     const apiKey = process.env.NEXT_PUBLIC_LIGHTHOUSE_API_KEY as string;
+    // make BigInt serializable
+    (BigInt.prototype as any).toJSON = function () {
+      return this.toString();
+    };
     const data = {
       contractAddress: contractAddress,
       widgets: widgets,

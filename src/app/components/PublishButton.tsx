@@ -43,6 +43,7 @@ const PublishButton = () => {
       // set the success state
       setPublishStep(2);
     } catch (e) {
+      console.log(e);
       setPublishStep(3);
     }
   };
