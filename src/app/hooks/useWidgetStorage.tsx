@@ -1,3 +1,4 @@
+"use client";
 import lighthouse from "@lighthouse-web3/sdk";
 import { WIDGET } from "../utils.ts/interfaces";
 import axios from "axios";
