@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
 import { useWidgetStorage } from "../hooks/useWidgetStorage";
-import { canvasWidgetsAtom } from "../utils.ts/atoms";
+import { activeContractAtom, canvasWidgetsAtom } from "../utils.ts/atoms";
 import { useRef, useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { Upload } from "react-feather";
@@ -21,6 +21,7 @@ let window: any = globalThis;
 const PublishButton = () => {
   const [publishStep, setPublishStep] = useState<number>(0);
   const [canvasWidgets] = useAtom(canvasWidgetsAtom);
+  const [activeContract] = useAtom(activeContractAtom);
   const storage = useWidgetStorage();
 
   const interfaceHashRef = useRef<string>("");
@@ -32,7 +33,10 @@ const PublishButton = () => {
       // set the loading state
       setPublishStep(1);
       // upload the widget data
-      const response = await storage.uploadWidgetData(canvasWidgets);
+      const response = await storage.uploadWidgetData(
+        activeContract as string,
+        canvasWidgets,
+      );
       const hash = response.data.Hash;
       // set the hash
       interfaceHashRef.current = hash;
@@ -91,7 +95,7 @@ const PublishButton = () => {
       e.preventDefault();
       // navigate to the interface page in a new tab
       window.open(`/interface/${interfaceHashRef.current}`, "_blank");
-    }
+    };
 
     return (
       <>
@@ -156,8 +160,13 @@ const PublishButton = () => {
     return <AlertDialogContent>{currentStep}</AlertDialogContent>;
   };
 
+  const handleOpenChange = (isOpen: boolean) => {
+    // reset steps when dialogue is closed
+    if (!isOpen) setPublishStep(0);
+  };
+
   return (
-    <AlertDialog>
+    <AlertDialog onOpenChange={handleOpenChange}>
       <AlertDialogTrigger>
         <span className="flex items-center gap-2 transition-all hover:text-blue-500">
           <Upload size={15} />

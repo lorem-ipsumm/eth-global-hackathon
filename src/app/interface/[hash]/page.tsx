@@ -5,23 +5,30 @@ import { useEffect, useState } from "react";
 import { BounceLoader, PuffLoader } from "react-spinners";
 import ActionsBar from "~/app/components/ActionsBar";
 import Canvas from "~/app/editor/Canvas";
+import { useContractAbi } from "~/app/hooks/useContractAbi";
 import { useWidgetStorage } from "~/app/hooks/useWidgetStorage";
-import { canvasWidgetsAtom } from "~/app/utils.ts/atoms";
+import { activeContractAtom, canvasWidgetsAtom } from "~/app/utils.ts/atoms";
 
 const Page = ({ params }: { params: { hash: string } }) => {
   const [, setCanvasWidgets] = useAtom(canvasWidgetsAtom);
   const [isPending, setIsPending] = useState<boolean>(true);
+  const [, setActiveContract] = useAtom(activeContractAtom);
   const storage = useWidgetStorage();
+  const { determineContractValidity } = useContractAbi();
 
   useEffect(() => {
     loadWidgets();
   }, []);
 
   const loadWidgets = async () => {
-    console.log("loading widgets");
-    const widgets = await storage.loadWidgetData(params.hash);
-    console.log(widgets);
-    if (widgets) setCanvasWidgets(widgets);
+    const interfaceData:any = await storage.loadWidgetData(params.hash);
+    const widgets = interfaceData.widgets;
+    const contractAddress = interfaceData.contractAddress;
+    if (widgets) {
+      setActiveContract(contractAddress);
+      setCanvasWidgets(widgets);
+      determineContractValidity(contractAddress);
+    }
     setIsPending(false);
   };
 

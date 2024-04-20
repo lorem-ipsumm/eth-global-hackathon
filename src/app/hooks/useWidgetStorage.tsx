@@ -3,12 +3,16 @@ import { WIDGET } from "../utils.ts/interfaces";
 import axios from "axios";
 
 export const useWidgetStorage = () => {
-  const uploadWidgetData = async (widgets: WIDGET[][]) => {
+  const uploadWidgetData = async (
+    contractAddress: string,
+    widgets: WIDGET[][]
+  ) => {
     const apiKey = process.env.NEXT_PUBLIC_LIGHTHOUSE_API_KEY as string;
-
-    const json = JSON.stringify(widgets);
-
-    return await lighthouse.uploadText(json, apiKey);
+    const data = {
+      contractAddress: contractAddress,
+      widgets: widgets,
+    };
+    return await lighthouse.uploadText(JSON.stringify(data), apiKey);
   };
 
   const loadWidgetData = async (

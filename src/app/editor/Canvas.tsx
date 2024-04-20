@@ -6,12 +6,14 @@ import { useRef, useState } from "react";
 import SelectionArea from "../components/SelectionArea";
 import { ContractCallPayloadProvider } from "../Contexts/ContractCallPayloadProvider";
 import { usePathname } from "next/navigation";
+import { Toaster } from "~/components/ui/toaster";
 
 const Canvas = () => {
   const [canvasWidgets] = useAtom(canvasWidgetsAtom);
   const [activeWidgets, setActiveWidgets] = useAtom(activeWidgetsAtom);
   const canvasRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+
 
   const renderWidgets = () => {
     return canvasWidgets.map((widgetGroup, groupIndex) => (
@@ -43,6 +45,7 @@ const Canvas = () => {
 
   return (
     <div className="h-full w-4/5" ref={canvasRef}>
+      <Toaster/>
       {renderWidgets()}
       {renderSelectionArea()}
     </div>
