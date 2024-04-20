@@ -1,5 +1,4 @@
 "use client";
-
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { BounceLoader, PuffLoader } from "react-spinners";
@@ -9,7 +8,7 @@ import { useContractAbi } from "~/app/hooks/useContractAbi";
 import { useWidgetStorage } from "~/app/hooks/useWidgetStorage";
 import { activeContractAtom, canvasWidgetsAtom } from "~/app/utils.ts/atoms";
 
-const Page = ({ params }: { params: { hash: string } }) => {
+const Interface = ({ params }: { params: { hash: string } }) => {
   const [, setCanvasWidgets] = useAtom(canvasWidgetsAtom);
   const [isPending, setIsPending] = useState<boolean>(true);
   const [, setActiveContract] = useAtom(activeContractAtom);
@@ -56,4 +55,4 @@ const Page = ({ params }: { params: { hash: string } }) => {
   );
 };
 
-export default Page;
+export default Interface;
