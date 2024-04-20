@@ -66,14 +66,15 @@ const CanvasWidgetOuter = ({
   };
 
   const handleDrag = (e: any) => {
-    const children = widgetData.children.map((child) => child.id);
     const movementX = e.movementX;
     const movementY = e.movementY;
+    console.log(movementX);
 
-    if (children.length > 0) {
+    if (activeWidgets.length > 1) {
+      // move all active widgets along with the current widget
       const updatedWidgets = canvasWidgets.map((widgetGroup) =>
         widgetGroup.map((widget) => {
-          if (children.includes(widget.id)) {
+          if (activeWidgets.includes(widget.id)) {
             return {
               ...widget,
               position: {
@@ -85,7 +86,6 @@ const CanvasWidgetOuter = ({
           return widget;
         }),
       );
-
       setCanvasWidgets(updatedWidgets);
     }
   };
@@ -194,11 +194,12 @@ const CanvasWidgetOuter = ({
         width: widgetData.size.width,
         height: widgetData.size.height,
       }}
+      position={{ x: widgetData.position.x, y: widgetData.position.y }}
       bounds={"parent"}
       // @ts-ignore
       resizeGrid={getResizeGrid()}
       dragGrid={[25, 25]}
-      className={`${borderStyle} rounded-sm transition-[border]`}
+      className={`${borderStyle} rounded-md transition-[border]`}
       id={widgetData.id}
       onMouseDown={handleMouseDown}
       onResize={handleResize}

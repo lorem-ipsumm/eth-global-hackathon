@@ -10,7 +10,7 @@ export const useWidgetStyles = () => {
     label:
       "border-2 border-slate-300 px-2 text-center text-sm flex items-center justify-center overflow-hidden",
     input: "bg-white border border-slate-300 px-2 outline-none",
-    button: "select-none !bg-blue-500 text-white font-bold",
+    button: "select-none !bg-blue-600 text-white font-bold rounded-sm",
     rectangle: "!bg-slate-100 outline-none w-full h-full px-2 rounded-sm",
     text: "bg-slate-400 text-center",
     image: "bg-slate-100 rounded-sm",
