@@ -33,15 +33,7 @@ const chains = [
 const onboard = init({
   apiKey: process.env.NEXT_PUBLIC_ONBOARD_API_KEY,
   wallets,
-  chains,
-  accountCenter: {
-    desktop: {
-      enabled: false,
-    },
-    mobile: {
-      enabled: false,
-    },
-  },
+  chains
 });
 
 export default function RootLayout({
