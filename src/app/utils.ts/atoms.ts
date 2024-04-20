@@ -17,3 +17,5 @@ export const canvasWidgetsAtom = atom<Array<WIDGET>[]>([[]]);
 export const walletAtom = atom<any>(null);
 // the active widget
 export const activeWidgetsAtom = atom<string[]>([]);
+// the web3 onboard object
+export const onboardAtom = atom<any>(null);

@@ -1,35 +1,19 @@
 "use client";
 import injectedModule from "@web3-onboard/injected-wallets";
 import { init, useConnectWallet } from "@web3-onboard/react";
+import { useAtom } from "jotai";
 import { Wallet } from "lucide-react";
+import { onboardAtom } from "../utils.ts/atoms";
 
-const injected = injectedModule();
-const wallets = [injected];
-
-const chains = [
-  {
-    id: 1,
-    token: "ETH",
-    label: "Ethereum Mainnet",
-    rpcUrl: process.env.NEXT_PUBLIC_ARBITRUM_RPC_URL,
-  },
-];
-
-const onboard = init({
-  wallets,
-  chains,
-  accountCenter: {
-    desktop: {
-      enabled: false,
-    },
-    mobile: {
-      enabled: false,
-    },
-  },
-});
 
 const ConnectWallet = () => {
   const [{ wallet }] = useConnectWallet();
+  const [onboard] = useAtom(onboardAtom);
+
+  const connect = () => {
+    console.log("connecting wallet");
+    onboard.connectWallet();
+  }
 
   const renderConnectWalletButton = () => {
     let text = "Connect Wallet";
@@ -39,7 +23,7 @@ const ConnectWallet = () => {
     }
     return (
       <button
-        onClick={() => onboard.connectWallet()}
+        onClick={connect}
         className="flex items-center gap-2 transition-all hover:text-blue-500"
       >
         <Wallet size={14} />

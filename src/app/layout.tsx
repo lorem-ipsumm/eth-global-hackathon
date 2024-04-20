@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import injectedModule from "@web3-onboard/injected-wallets";
 import { init, useConnectWallet } from "@web3-onboard/react";
 import { useAtom } from "jotai";
-import { walletAtom } from "./utils.ts/atoms";
+import { onboardAtom, walletAtom } from "./utils.ts/atoms";
 import { useEffect } from "react";
 
 const inter = Inter({
@@ -31,6 +31,7 @@ const chains = [
 ];
 
 const onboard = init({
+  apiKey: process.env.NEXT_PUBLIC_ONBOARD_API_KEY,
   wallets,
   chains,
   accountCenter: {
@@ -49,10 +50,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [, setUserWallet] = useAtom(walletAtom);
+  const [, setOnboard] = useAtom(onboardAtom);
   const [{ wallet }] = useConnectWallet();
 
   useEffect(() => {
     if (wallet) setUserWallet(wallet);
+    setOnboard(onboard);
   }, [wallet]);
 
   return (
