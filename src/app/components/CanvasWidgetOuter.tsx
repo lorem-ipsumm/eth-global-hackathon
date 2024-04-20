@@ -65,16 +65,14 @@ const CanvasWidgetOuter = ({
     );
   };
 
-  const handleDrag = (e: any) => {
-    const movementX = e.movementX;
-    const movementY = e.movementY;
-    console.log(movementX);
-
+  const handleDrag = (e: any, data: any) => {
+    const movementX = data.deltaX;
+    const movementY = data.deltaY;
     if (activeWidgets.length > 1) {
       // move all active widgets along with the current widget
       const updatedWidgets = canvasWidgets.map((widgetGroup) =>
         widgetGroup.map((widget) => {
-          if (activeWidgets.includes(widget.id)) {
+          if (activeWidgets.includes(widget.id) && widget.id !== widgetData.id) {
             return {
               ...widget,
               position: {
