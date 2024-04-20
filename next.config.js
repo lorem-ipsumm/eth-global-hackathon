@@ -6,9 +6,10 @@ await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
 const config = {
+  swcMinify: false,
   eslint: {
     ignoreDuringBuilds: true
-  }
+  },
 };
 
 export default config;
