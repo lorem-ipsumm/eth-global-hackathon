@@ -38,11 +38,9 @@ export const useWidgetStyles = () => {
   const updateWidgetStyle = (widgetId: string, newStyles: string) => {
     const updatedWidgets = canvasWidgets.map((widgetGroup) =>
       widgetGroup.map((widget) => {
-        console.log("test", newStyles);
-        if (widget.id === widgetId) {
+        if (widget.id === widgetId)
           widget.styles = [...widget.styles, newStyles];
-        }
-        console.log(widget);
+
         return widget;
       }),
     );

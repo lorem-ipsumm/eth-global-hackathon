@@ -11,7 +11,6 @@ const Label = ({ widgetData }: WIDGET_RENDER_PROPS) => {
   const { getDefaultStyles } = useWidgetStyles();
   const { callContract } = useContractCall();
   const [activeContract] = useAtom(activeContractAtom);
-  const [styles, setStyles] = useState(widgetData.styles);
 
   const { contractCallReturnData } = useContext(ContractCallPayloadContext);
   const [externalValue, setExternalValue] = useState(widgetData.externalValue);

@@ -92,7 +92,7 @@ const MiscellaneousView = () => {
         {sectionTitle("Widget Props")}
         <div className="flex flex-col gap-2">
           {prop("Default Value", defaultValue, onDefaultValueChange)}
-          {prop("Custom CSS", customCSS, handleCustomCSSChange)}
+          {/* {prop("Custom CSS", customCSS, handleCustomCSSChange)} */}
         </div>
       </div>
     );
