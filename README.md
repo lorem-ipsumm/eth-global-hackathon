@@ -1,29 +1,15 @@
-# Create T3 App
+## Welcome to Dapp Canvas
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+For our hackathon project, we created a custom UI builder meant to support an underlying smart contract defined by a user. The idea is to allow users to input any smart contract address who’s ABI will be fetched from an applicable block explorer, and then widgets can be created and moved around the live editor and can hook into the underlying smart contract. Users can customize which widgets they’d like to use and which widget will correspond to which function within the smart contract. The user can also add widgets that do not interact with the smart contract for customization purposes. These widgets include, text boxes, shapes, images and gifs. After a user finishes customizing their UI, they have the option to publish it. Publishing it will generate a link & will store the metadata for all canvas widgets on Filecoin. <br>
+<br>
+One benefit to Dapp Canvas is that smart contract developers will be able to create light weight UIs to interact with their smart contracts deployed to testnets. This would give them an alternative to creating numerous scripts, or having to reshuffle an existing complex UI if they already had one established. An additional use case would be creating UIs on top of protocols that offer fee generation specifically for building UIs on top of said protocol. This would give users a simple no code solution to get started.<br>
+<br>
 
-## What's next? How do I make an app with this?
+**Imagination is the only limitation**
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
-
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
-
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
-
-## Learn More
-
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+# Tech Stack
+- Filecoin: Used to store user created widget metadata. Once the site is published, widget data is fetched from Filecoin and used to build the widgets clientside.
+- Next.JS: Used as a frontend framework.
+- TailwindCSS: Used as a styling framework.
+- EtherJS: Used for contract interaction.
+- Arbiscan: Used to fetch ABI data for on-chain contracts.

@@ -38,8 +38,8 @@ const Label = ({ widgetData }: WIDGET_RENDER_PROPS) => {
 
   const displayValue = () => {
     try {
-      if (externalValue !== null) {
-        return externalValue!.toString();
+      if (externalValue || externalValue?.toString() === "0") {
+        return widgetData.externalValue!.toString();
       }
     } catch (error: any) {
       console.error("Error converting externalValue to string:", error);
