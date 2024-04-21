@@ -38,7 +38,7 @@ const Label = ({ widgetData }: WIDGET_RENDER_PROPS) => {
 
   const displayValue = () => {
     try {
-      if (externalValue) {
+      if (externalValue || externalValue?.toString() === "0") {
         return widgetData.externalValue!.toString();
       }
     } catch (error: any) {
