@@ -35,12 +35,12 @@ export const useWidgetStyles = () => {
     }
   };
 
-  const updateWidgetStyle = (widgetId: string, newStyles: any) => {
+  const updateWidgetStyle = (widgetId: string, newStyles: string) => {
     const updatedWidgets = canvasWidgets.map((widgetGroup) =>
       widgetGroup.map((widget) => {
-        if (widget.id === widgetId) {
-          return { ...widget, styles: newStyles };
-        }
+        if (widget.id === widgetId)
+          widget.styles = [...widget.styles, newStyles];
+
         return widget;
       }),
     );
