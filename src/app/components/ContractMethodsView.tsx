@@ -168,7 +168,7 @@ const ContractMethodsView = () => {
   };
 
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="flex h-full w-full flex-col fade-in">
       {renderTabs()}
       {renderMethods()}
     </div>

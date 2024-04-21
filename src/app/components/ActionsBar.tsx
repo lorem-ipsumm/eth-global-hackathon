@@ -18,7 +18,7 @@ const ActionsBar = () => {
   };
 
   return (
-    <div className="fixed left-3 bottom-3 flex h-10 w-auto bg-white items-center gap-3 rounded-md border border-slate-500 px-3 shadow-lg">
+    <div className="fixed left-3 bottom-3 flex h-10 w-auto bg-white items-center gap-3 rounded-md border border-slate-500 px-3 shadow-lg fade-in">
       <ConnectWallet />
       {renderPublish()}
     </div>
