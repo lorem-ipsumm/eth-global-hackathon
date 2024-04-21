@@ -34,7 +34,7 @@ const Label = ({ widgetData }: WIDGET_RENDER_PROPS) => {
         console.error(e);
       }
     })();
-  }, []);
+  }, [setExternalValue]);
 
   const displayValue = () => {
     try {

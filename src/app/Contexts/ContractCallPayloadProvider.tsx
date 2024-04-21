@@ -21,7 +21,6 @@ export const ContractCallPayloadProvider: FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     if (!activeContract || !methodName || isWriteMethod) return;
-
     (async () => {
       try {
         const response = await callContract(
@@ -35,7 +34,7 @@ export const ContractCallPayloadProvider: FC<{ children: ReactNode }> = ({
         console.error(e);
       }
     })();
-  }, [contractCallPayload]);
+  }, [contractCallPayload, contractCallReturnData]);
 
   return (
     <ContractCallPayloadContext.Provider

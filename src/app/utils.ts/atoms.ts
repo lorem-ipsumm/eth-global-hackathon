@@ -19,3 +19,5 @@ export const walletAtom = atom<any>(null);
 export const activeWidgetsAtom = atom<string[]>([]);
 // the web3 onboard object
 export const onboardAtom = atom<any>(null);
+// contract call increment
+export const contractCallIncrementAtom = atom<number>(0);

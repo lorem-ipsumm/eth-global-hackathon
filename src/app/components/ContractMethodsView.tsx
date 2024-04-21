@@ -152,7 +152,7 @@ const ContractMethodsView = () => {
 
   const renderMethods = () => {
     if (activeTab === "misc") {
-      return <MiscellaneousView/>
+      return <MiscellaneousView />;
     } else {
       // get methods based on active tab
       const methods = activeTab === "read" ? readMethods : writeMethods;

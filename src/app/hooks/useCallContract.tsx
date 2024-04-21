@@ -1,6 +1,10 @@
 import { ethers } from "ethers";
 import { useCallback, useEffect, useRef } from "react";
-import { fullAbiAtom, walletAtom } from "../utils.ts/atoms";
+import {
+  fullAbiAtom,
+  walletAtom,
+  contractCallIncrementAtom,
+} from "../utils.ts/atoms";
 import { useAtom } from "jotai";
 
 export const useContractCall = () => {
@@ -8,6 +12,9 @@ export const useContractCall = () => {
   const [wallet] = useAtom(walletAtom);
   const walletRef = useRef(null);
   const fullAbiRef = useRef(null);
+  const [contractCallCnt, setContractCallCnt] = useAtom(
+    contractCallIncrementAtom,
+  );
 
   // this is kind of wacky but I don't feel like
   // figuring out the ins and outs of react to
@@ -17,7 +24,23 @@ export const useContractCall = () => {
     if (fullAbi) fullAbiRef.current = fullAbi;
   }, [wallet, fullAbi]);
 
-  const callContract = useCallback(
+  const callContract = (
+    contractAddress: string,
+    methodName: string,
+    args: Object,
+    isWriteMethod?: boolean,
+  ) => {
+    const response = callContractCallback(
+      contractAddress,
+      methodName,
+      args,
+      isWriteMethod,
+    );
+    setContractCallCnt(contractCallCnt + 1);
+    return response;
+  };
+
+  const callContractCallback = useCallback(
     async (
       contractAddress: string,
       methodName: string,
@@ -26,6 +49,7 @@ export const useContractCall = () => {
     ) => {
       let provider;
       let contract;
+      let contractRes;
       try {
         if (!isWriteMethod && fullAbiRef.current) {
           provider = new ethers.JsonRpcProvider(
@@ -33,7 +57,7 @@ export const useContractCall = () => {
           );
           const fullAbi: any = fullAbiRef.current;
           contract = new ethers.Contract(contractAddress, fullAbi, provider);
-          return await (contract[methodName] as Function)(
+          contractRes = await (contract[methodName] as Function)(
             ...Object.values(args),
           );
         } else if (isWriteMethod && walletRef.current && fullAbiRef.current) {
@@ -42,12 +66,14 @@ export const useContractCall = () => {
           provider = new ethers.BrowserProvider(wallet.provider);
           const signer = await provider.getSigner();
           contract = new ethers.Contract(contractAddress, fullAbi, signer);
-          return await (contract[methodName] as Function)(
+          contractRes = await (contract[methodName] as Function)(
             ...Object.values(args),
           );
         } else {
           throw new Error("Invalid contract call");
         }
+
+        return contractRes;
       } catch (err: any | null) {
         console.error(err);
       }
