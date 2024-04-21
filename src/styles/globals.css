@@ -76,14 +76,22 @@
   }
 }
 
-.animated {
-  background: linear-gradient(38deg,
-      rgb(77, 89, 104),
-      rgb(148 163 184),
-      rgb(226 232 240),
-      rgb(71 85 105));
-  animation: slidebg 10s ease-in-out infinite;
-  background-size: 400% 400%;
+.bg {
+  /*#fbf9ec*/
+  /*#f3efdf*/
+  background: linear-gradient(
+    to bottom,
+    #faf8e9,
+    #f2eedf
+  );
+  background-image: linear-gradient(
+      to bottom right,
+      rgba(255, 255, 255, 0.5),
+      rgba(192, 191, 249, 0.2)
+    ),
+    url("../app/assets/bg.png");
+  /* shift the background image to the right */
+  background-position: 200% 50%;
 }
 
 @keyframes slidebg {
@@ -97,5 +105,33 @@
 
   100% {
     background-position: 0% 50%;
+  }
+}
+
+.fade-in-opacity {
+  animation: fadeInOpacity 0.5s ease-in-out;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeInOpacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }

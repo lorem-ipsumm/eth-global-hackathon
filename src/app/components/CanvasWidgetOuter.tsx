@@ -1,5 +1,5 @@
 import { Rnd } from "react-rnd";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ContractCallPayloadContext } from "../Contexts/ContractCallPayloadProvider";
 import { WIDGET } from "../utils.ts/interfaces";
 import {
@@ -34,12 +34,33 @@ const CanvasWidgetOuter = ({
   const pathname = usePathname();
   const [canvasWidgets, setCanvasWidgets] = useAtom(canvasWidgetsAtom);
   const { setIsWriteMethod } = useContext(ContractCallPayloadContext);
+  const [isShiftPressed, setIsShiftPressed] = useState(false);
 
   const { defaultStyles } = useWidgetStyles();
 
   const borderStyle = activeWidgets.includes(widgetData.id)
     ? "border-2 border-blue-500"
     : "border-2 border-transparent";
+
+  useEffect(() => {
+    // make event listener for shift key
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Shift") {
+        setIsShiftPressed(true);
+      }
+    };
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === "Shift") {
+        setIsShiftPressed(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
 
   useEffect(() => {
     setIsWriteMethod(widgetData.isWriteMethod);
@@ -72,7 +93,10 @@ const CanvasWidgetOuter = ({
       // move all active widgets along with the current widget
       const updatedWidgets = canvasWidgets.map((widgetGroup) =>
         widgetGroup.map((widget) => {
-          if (activeWidgets.includes(widget.id) && widget.id !== widgetData.id) {
+          if (
+            activeWidgets.includes(widget.id) &&
+            widget.id !== widgetData.id
+          ) {
             return {
               ...widget,
               position: {
@@ -167,8 +191,17 @@ const CanvasWidgetOuter = ({
   const handleMouseDown = (e: any) => {
     if (pathname !== "/editor") return;
     setActiveWidgets([...activeWidgets, widgetData.id]);
-    if (e.button === 0 && activeWidgets.length < 2) {
+    if (e.button === 0 && activeWidgets.length < 2 && !isShiftPressed) {
       setActiveWidgets([widgetData.id]);
+    } else if (e.button === 0 && isShiftPressed) {
+      // if shift is pressed, add the widget to the active widgets
+      if (activeWidgets.includes(widgetData.id)) {
+        // if widget is already active, remove it from active widgets
+        setActiveWidgets(activeWidgets.filter((id) => id !== widgetData.id));
+      } else {
+        // if widget is not active, add it to active widgets
+        setActiveWidgets([...activeWidgets, widgetData.id]);
+      }
     } else if (e.button === 2) {
       setActiveWidgets([...activeWidgets, widgetData.id]);
     }
