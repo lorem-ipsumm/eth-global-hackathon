@@ -1,9 +1,10 @@
 import { ABI_METHOD, WIDGET } from "../utils.ts/interfaces";
-import { canvasWidgetsAtom } from "../utils.ts/atoms";
+import { activeWidgetsAtom, canvasWidgetsAtom } from "../utils.ts/atoms";
 import { useAtom } from "jotai";
 
 export const useCanvasWidget = () => {
   const [canvasWidgets, setCanvasWidgets] = useAtom(canvasWidgetsAtom);
+  const [activeWidgets, setActiveWidgets] = useAtom(activeWidgetsAtom);
 
   const isWriteMethod = (methodData: ABI_METHOD) => {
     return (
@@ -142,6 +143,9 @@ export const useCanvasWidget = () => {
     parentWidget.size.width += 50;
     parentWidget.children = children;
     newWidgets = [parentWidget, ...newWidgets];
+
+    // set all new widgets to be active
+    setActiveWidgets(newWidgets.map((widget) => widget.id));
 
     const { parentX, parentY } = getUnoccupiedCoordinatesForWrapper();
 
