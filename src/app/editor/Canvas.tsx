@@ -9,31 +9,10 @@ import { usePathname } from "next/navigation";
 import { Toaster } from "~/components/ui/toaster";
 
 const Canvas = () => {
-  const [canvasWidgets, setCanvasWidgets] = useAtom(canvasWidgetsAtom);
+  const [canvasWidgets] = useAtom(canvasWidgetsAtom);
   const [activeWidgets, setActiveWidgets] = useAtom(activeWidgetsAtom);
   const canvasRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-
-  useEffect(() => {
-    // create key listener for delete key
-    // to delete active widgets
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Delete") {
-        deleteWidgets();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  const deleteWidgets = () => {
-    const newCanvasWidgets = canvasWidgets.map((widgetGroup) =>
-      widgetGroup.filter((widget) => !activeWidgets.includes(widget.id)),
-    );
-    setCanvasWidgets(newCanvasWidgets);
-    setActiveWidgets([]);
-  };
-
 
   const renderWidgets = () => {
     return canvasWidgets.map((widgetGroup, groupIndex) => (
