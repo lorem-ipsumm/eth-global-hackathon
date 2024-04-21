@@ -17,32 +17,28 @@ const chains = [
   },
 ];
 
+const onboard = init({
+  apiKey: process.env.NEXT_PUBLIC_ONBOARD_API_KEY,
+  wallets,
+  chains,
+  accountCenter: {
+    desktop: {
+      enabled: false
+    },
+    mobile: {
+      enabled: false
+    }
+  }
+});
+
 const WalletWrapper = (props: { children: any }) => {
   const [, setUserWallet] = useAtom(walletAtom);
   const [, setOnboard] = useAtom(onboardAtom);
   const [{ wallet }] = useConnectWallet();
 
   useEffect(() => {
-    const onboard = init({
-      apiKey: process.env.NEXT_PUBLIC_ONBOARD_API_KEY,
-      wallets,
-      chains,
-      accountCenter: {
-        desktop: {
-          enabled: false
-        },
-        mobile: {
-          enabled: false
-        }
-      }
-
-    });
+    if (wallet) setUserWallet(wallet);
     setOnboard(onboard);
-  }, []);
-
-  useEffect(() => {
-    if (wallet) 
-      setUserWallet(wallet);
   }, [wallet]);
 
   return props.children;
